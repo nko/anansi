@@ -1,5 +1,4 @@
 var express = require('express'),
-	mustache = require('mustache'),
 	sys = require('sys'),
 	fs = require('fs');
 
@@ -37,4 +36,4 @@ app.post('/problem', function(req, res){
     res.redirect('/problem/'+id);
 });
 
-app.listen(3000);
+app.listen(80);
