@@ -1,2 +1,18 @@
-h2 #{problem.name}
-h3 #{problem.status}
+- if (problem.status === 'queued')
+  .message
+    | Your problem is queued up to run.
+    a(href="/problem/"+problem.id+"/start") Start the Job
+
+h2
+  =problem.name
+  span= problem.status
+dl
+  dt Map Function
+  dd.js
+    pre= problem.map_function
+  dt Reduce Function
+  dd.js
+    pre= problem.reduce_function
+  dt Input Data
+  dd.js
+    pre= JSON.stringify(problem.data)

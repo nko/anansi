@@ -24,6 +24,31 @@ body {
   padding: 0;
   text-align: center;
 }
+h2 {
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 20px;
+  margin-bottom: 20px;
+}
+  h2 span {
+    background: #777;
+    color: #eee;
+    font-size: 14px;
+    font-weight: normal;
+    margin-left: 30px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+  }
+dl {}
+  dt {
+    font-weight: bold;
+    padding: 0 0 5px;
+  }
+  dd {
+    padding-bottom: 10px;
+  }
 
 /** =LAYOUT                                                       */
 #container {
@@ -89,6 +114,16 @@ body {
   .message.errors {
     background: pink;
     border: 1px solid red;
+  }
+
+
+dl {}
+  dt {
+  }
+  dd.js {
+    border: 1px dotted #555;
+    margin: 0 10px 20px 50px;
+    padding: 10px;
   }
 
 /** =FORM                                                         */
