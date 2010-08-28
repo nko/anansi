@@ -1,7 +1,7 @@
-ul
-  - for (var i in problems)
-    - p = problems[i]
-    li
-      a(href="/problem/"+p.id) #{p.name}
+- for (var idx in problems)
+  - var p = problems[idx]
+  h2
+    a(href="/problem/"+p.id)= p.name
+    span= p.status
 
 a(href="/problem") Start a new problem
