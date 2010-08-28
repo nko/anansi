@@ -9,6 +9,9 @@ sys.puts('Got db: '+db.name);
 db.exists(function (err, res) {
     sys.puts('db.exists => err = '+sys.inspect(err));
     sys.puts('db.exists => res = '+sys.inspect(res));
+    if (!res) {
+        db.create();
+    }
 });
 //*/
 
