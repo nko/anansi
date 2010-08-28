@@ -20,7 +20,6 @@ app.configure(function() {
 });
 
 app.configure('development', function() {
-    //listenPort = 3000;
 });
 
 app.use("/workers", require("./worker_api.js"));
@@ -79,4 +78,4 @@ app.post('/problem', function(req, res) {
 
 
 // Listen on 80? Really?
-app.listen(listenPort);
+app.listen(parseInt(process.env.PORT || listenPort));
