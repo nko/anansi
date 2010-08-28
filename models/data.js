@@ -1,5 +1,4 @@
 mongoose.model('Data', {
-	properties: ['id', 'inputMap', 'intermediaryMap', 'outputMap'],
+    properties: ['id', 'map_input', 'reduce_input', 'output'],
 
-	
 });
