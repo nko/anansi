@@ -28,12 +28,6 @@ app.get('/', function(req, res) {
 	Problems.find().all(function(arr) {
 		res.render('index', arr);
 	});
-	// var problems = Problem.findAll(c);
-    /*c.query("select * from problems;", function(err, rows) {
-        if (err) throw err;
-        puts(rows);
-    }); */
-    //res.render('index');
 });
 
 /* Form to create problem */
