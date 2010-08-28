@@ -1,8 +1,8 @@
 var express = require('express'),
     sys = require('sys'),
     fs = require('fs'),
-    listenPort = 80,
-    app = express.createServer(),
+	listenPort = 3000,
+	app = express.createServer(),
     mongoose = require('mongoose').Mongoose,
     db = mongoose.connect('mongodb://nodeko:a7b9e9c6c9f@nodeko.mongohq.com:27090/bold-glass');
     
@@ -52,7 +52,6 @@ app.get('/problem', function(req, res) {
 
 /* Get a specific problem */
 app.get('/problem/:id', function(req, res) {
-
     // TODO get object here
     // TODO if this problem isn't running yet, then show an option to start it
     res.render('problem/show', {
