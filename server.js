@@ -70,6 +70,16 @@ var Problem = function(opts) {
     this.type = 'problem';
 };
 
+/* Redirect to correct URL on every request */
+app.get(/.*/, function (req, resp, next) {
+    var host, path = [req.header('host'), req.url];
+    if (host == 'www.maprejuice.com' || host == 'anansi.no.de') {
+        resp.redirect("http://maprejuice.com#{path}", 301);
+    } else {
+        next();
+    }
+});
+
 /* Homepage */
 app.get('/', function(req, res) {
     db.view('problems/all',
