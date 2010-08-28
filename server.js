@@ -1,13 +1,10 @@
 var express = require('express'),
     sys = require('sys'),
     fs = require('fs'),
-    pg = require('postgres');
-var puts = sys.puts;
-
-var listenPort = 80;
-var c = pg.createConnection("host='' dbname=anansi");
-
-var app = express.createServer();
+	listenPort = 3000,
+	app = express.createServer(),
+    mongoose = require('mongoose').Mongoose,
+	db = mongoose.connect('mongodb://nodeko:a7b9e9c6c9f@nodeko.mongohq.com:27090/bold-glass');
 
 app.configure(function() {
     app.use(express.logger({
@@ -16,6 +13,7 @@ app.configure(function() {
     app.set('view engine', 'jade');
     app.use(express.staticProvider(__dirname + '/public'));
 });
+
 app.configure('development', function() {
     //listenPort = 3000;
 });
@@ -24,12 +22,17 @@ app.use("/workers", require("./worker_api.js"));
 
 /* Homepage */
 app.get('/', function(req, res) {
-    // var problems = Problem.findAll(c);
-    c.query("select * from problems;", function(err, rows) {
+    var Problems = db.model('Problem');
+
+	Problems.find().all(function(arr) {
+		res.render('index', arr);
+	});
+	// var problems = Problem.findAll(c);
+    /*c.query("select * from problems;", function(err, rows) {
         if (err) throw err;
         puts(rows);
-    });
-    res.render('index');
+    }); */
+    //res.render('index');
 });
 
 /* Form to create problem */
@@ -53,10 +56,15 @@ app.get('/problem/:id', function(req, res) {
 
 /* This is where the problem is actually created */
 app.post('/problem', function(req, res) {
-    var id = 1;
-    // TODO save the problem
-    // TODO create all the tasks necessary for the map part of this map-reduce algorithm
-    res.redirect('/problem/' + id);
+    var Problem = db.model('Problem');
+    
+	var p = new Problem();
+	p.name = req.param('problem_name');
+
+	p.save(function(obj) {
+		sys.puts(obj);
+		res.redirect('/problem/' + obj.id);
+	});
 });
 
 /* Get the next task on the queue */
