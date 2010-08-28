@@ -72,7 +72,9 @@ var Problem = function(opts) {
 
 /* Redirect to correct URL on every request */
 app.get(/.*/, function (req, resp, next) {
-    var host, path = [req.header('host'), req.url];
+    var host = req.header('host');
+    var path = req.url;
+    sys.puts('host => '+host+", path => "+path);
     if (host == 'www.maprejuice.com' || host == 'anansi.no.de') {
         resp.redirect("http://maprejuice.com#{path}", 301);
     } else {
