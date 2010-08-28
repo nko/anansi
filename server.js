@@ -28,7 +28,8 @@ app.use("/workers", require("./worker_api.js"));
 app.get('/', function(req, res) {
     
     Problem.find().all(function(array){
-        console.log(sys.inspect(array));
+     console.log(sys.inspect(array));
+     res.render('index');
     });
 
     // 
@@ -40,7 +41,6 @@ app.get('/', function(req, res) {
         if (err) throw err;
         puts(rows);
     }); */
-    //res.render('index');
 });
 
 /* Form to create problem */
@@ -67,12 +67,12 @@ app.post('/problem', function(req, res) {
     var p = new Problem();
     p.name = req.param('problem_name');
     // TODO sanitize the shit out of this. Make sure it's valid js etc
-    p.map_algorithm = req.param("problem_map_algorithm");
-    p.reduceAlgorithm = req.param("problem_reduce_algorithm");
-    console.log(sys.inspect(p));
-    p.save(function(obj) {
+    // p.map_algorithm = req.param("problem_map_algorithm");
+    // p.reduce_algorithm = req.param("problem_reduce_algorithm");
+
+    p.save(function() {
         console.log(sys.inspect(arguments));
-        res.redirect('/problem/' + obj.id);
+        res.redirect('/problem/' + p.id);
     });
 });
 
