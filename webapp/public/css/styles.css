@@ -1,9 +1,139 @@
 /******************************************************************/
 /** CSS                                                           */
 /** = GLOBAL                                                      */
+/** = LAYOUT                                                      */
+/** = FORM                                                        */
 /******************************************************************/
+
+/** =RESET                                                        */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, font, img, kbd, q, s, samp,
+small, strike, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+margin: 0; padding: 0; border: 0; outline: 0; font-weight: inherit; font-style: inherit; font-size: 100%; font-family: inherit; vertical-align: baseline; }
+:focus { outline: 0; }
+body { line-height: 1; }
+ol, ul { list-style: none; }
+table { border-collapse: separate; border-spacing: 0; }
+caption, th, td { text-align: left; font-weight: normal; }
+blockquote:before, blockquote:after, q:before, q:after { content: ""; }
+blockquote, q { quotes: "" ""; }
 
 /** =GLOBAL                                                       */
 body {
+  background: #222;
   font-family: 'Helvetica', Arial, sans-serif;
+  padding: 0;
+  text-align: center;
 }
+
+/** =LAYOUT                                                       */
+#container {
+  background: #fff;
+  margin: 30px auto;
+  text-align: left;
+  width: 600px;
+  border-radius: 12px;
+  -moz-border-radius: 12px;
+  -webkit-border-radius: 12px;
+  box-shadow: 0 0 10px #333;
+  -moz-box-shadow: 0 0 10px #333;
+  -webkit-box-shadow: 0 0 10px #333;
+}
+#header {
+  border-bottom: 2px solid #222;
+  padding: 20px;
+}
+  #header h1 {
+    font-size: 30px;
+  }
+  #header .tagline {
+    color: #555;
+    font-size: 12px;
+  }
+#nav {
+  border-bottom: 2px solid #222;
+  padding: 10px 0;
+}
+  #nav li {
+    display: inline;
+  }
+    #nav li a {
+      padding: 9px 20px;
+      text-decoration: none;
+    }
+    #nav li a:hover {
+      background: #aaa;
+      box-shadow: 0 0 5px #999;
+      -moz-box-shadow: 0 0 5px #999;
+      -webkit-box-shadow: 0 0 5px #999;
+    }
+#content {
+  padding: 20px;
+}
+#footer {
+  border-top: 2px solid #222;
+  color: #555;
+  font-size: 12px;
+  padding: 20px;
+}
+
+/** =FORM                                                         */
+form { }
+  form .form-field {
+    clear: both;
+    padding: 5px 0 20px;
+    position: relative;
+  }
+  form .form-field .step {
+    background: #999;
+    color: #eee;
+    float: left;
+    font-size: 40px;
+    height: 50px;
+    line-height: 50px;
+    margin-right: 30px;
+    text-align: center;
+    width: 50px;
+    border-radius: 24px;
+    -moz-border-radius: 24px;
+    -webkit-border-radius: 24px;
+  }
+  form .form-field.focused .step {
+    background: #555;
+  }
+  form .form-field.focused .instructions {
+    background: #efefef;
+    border: 1px solid #999;
+    float: right;
+    font-size: 11px;
+    padding: 10px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 120px;
+  }
+  form .form-field label {
+    display: block;
+  }
+    form .form-field label span {
+      float: right;
+      color: #555;
+      font-size: 12px;
+    }
+  form .form-field input[type="text"],
+    form .form-field textarea {
+    border: 1px solid #555;
+    font-size: 13px;
+    padding: 4px;
+    width: 300px;
+  }
+  form .form-field.submit {
+    background: #eee;
+    padding: 10px 20px;
+    text-align: right;
+    width: 360px;
+    border-radius: 12px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+  }
+  form .form-field.submit input[type="submit"] {
+    }
