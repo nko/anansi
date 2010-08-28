@@ -37,19 +37,19 @@ app.post('/problem', function(req, res){
     res.redirect('/problem/'+id);
 });
 
-/* Get a specific problem */
-app.get('/task', function(req, res) {
+/* Get a specific task */
+app.get('/task.js', function(req, res) {
     // TODO get object here
-    res.render('task/show', {
-        locals: {
-            problem: { id: 1, name: 'Problem 1' },
-            algorithm: {
-                map_function: "function(key, val) { anansi.emit('intermediate', key, val); }",
-                reduce_function: "function(key, val) { anansi.emit('output', key, val); }"
-            },
-            data: { key: "key", value: "value", type: "input" }
-        }
-    });
+    var problem = { id: 1, name: 'Problem 1' };
+    var algorithm = {
+        map_function: "function(key, val) { anansi.emit('intermediate', key, val); }",
+        reduce_function: "function(key, val) { anansi.emit('output', key, val); }"
+    };
+    var data = { key: "key", value: "value", type: "input" };
+    res.send(
+            "anansi.run("+problem.id+",'"+data.key+"','"+data.value+"',"+(data.type == "input" ? algorithm.map_function : algorithm.reduce_function)+");",
+            { 'Content-Type': 'text/javascript' }
+            );
 });
 
 // Listen on 80? Really?
