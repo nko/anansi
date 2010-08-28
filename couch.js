@@ -23,24 +23,33 @@ db.exists(function (err, res) {
 //});
 
 ///*
-db.get('b30fba2e6b5beb795f1fed91f6000c12', function (err, doc) {
+db.get('db8b3af81b102c450a8440fe870006c8', function (err, doc) {
     sys.puts("db.get => err = "+err);
     sys.puts("db.get => doc = "+doc);
 });
 sys.puts('Got p');
 
+db.view('problems/all', function (err, res) {
+    res.forEach(function (row) {
+        sys.puts(row.name + " is a problem");
+    });
+});
 /*
 db.insert({
-    name: 'Problem 2',
-    map_function: "function () { ; }",
-    reduce_function: "function () { ; }"
+    name: 'First Problem',
+    status: 'queued',
+    created_at: new Date().getTime(),
+    map_function: "function map(k,v) { ; }",
+    reduce_function: "function reduce(k,v) { ; }",
+    data: {},
+    type: 'problem'
 }, function (err, res) {
     // Handle response
     sys.puts('db.insert => err = '+sys.inspect(err));
     sys.puts('db.insert => res = '+sys.inspect(res));
 });
 sys.puts('Set p');
-*/
+//*/
 
 db.get('problem1', function (err, doc) {
     sys.puts('db.get(problem1) => doc = '+doc);

@@ -38,6 +38,20 @@ app.configure(function() {
                     emit(null, doc);
                 }
             }
+        },
+        running: {
+            map: function (doc) {
+                if (doc.name && doc.type == 'problem' && doc.status && doc.status == 'running') {
+                    emit(null, doc);
+                }
+            }
+        },
+        complete: {
+            map: function (doc) {
+                if (doc.name && doc.type == 'problem' && doc.status && doc.status == 'complete') {
+                    emit(null, doc);
+                }
+            }
         }
     });
 
@@ -62,9 +76,7 @@ app.get('/', function(req, res) {
             function (err, rowSet) {
                 var problemsList = [];
                 for (var row in rowSet) {
-//                    sys.puts('row => '+sys.inspect(rowSet[row].value));
                     var p = new Problem(rowSet[row].value);
-//                    sys.puts('problem => '+sys.inspect(p));
                     problemsList.push(p);
                 }
                 res.render('index', {
@@ -85,7 +97,6 @@ app.get('/problem', function(req, res) {
 app.get('/problem/:id', function(req, resp) {
     // get object
     db.get(req.params.id, function (err, result) {
-        sys.puts('row => '+sys.inspect(result));
         var p = new Problem(result);
         resp.render('problem/show', {
             locals: {
@@ -98,12 +109,9 @@ app.get('/problem/:id', function(req, resp) {
 /* This is where the problem is actually created */
 app.post('/problem', function(req, res) {
     // TODO sanitize the shit out of this. Make sure it's valid js etc
-    // p.map_algorithm = req.param("problem_map_algorithm");
-    // p.reduce_algorithm = req.param("problem_reduce_algorithm");
-
-    p.save(function() {
-        console.log(sys.inspect(arguments));
-        res.redirect('/problem/' + p.id);
+    var p = new Problem(req.body); // hack for now, we'll sanitize and split up data later
+    db.insert(p, function (err, result) {
+        res.redirect('/problem/' + result.id);
     });
 });
 
