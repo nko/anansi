@@ -10,6 +10,7 @@ app.configure(function(){
     app.use(express.staticProvider(__dirname + '/public'));
 });
 
+/* Homepage */
 app.get('/', function(req, res) {
 	res.render('index');
 });
