@@ -95,12 +95,13 @@ module.exports = (function() {
     that.getNextJob = function(callback) {
         process.nextTick(function() {
             callback(null, {
-                id: "some_job_id",
-                problem_id: "some_problem_id",
+                id: "problem123_map_567",
+                problem_id: "problem123",
                 type: "map",
-                enqueued_at: new Date().getTime(),
+                enqueued_at: new Date().getTime() - 100000,
                 input: {
-                    key: "value"
+                    key: "some_document",
+                    value: "There are two kinds of people. Those who understand binary and those who do not"
                 }
             }); // no error happened
         });
@@ -151,7 +152,36 @@ module.exports = (function() {
      */
     that.getMapForProblem = function(problem_id, callback) {
         process.nextTick(function() {
-            callback(null, "This is a random sentence where some words occur more than one time. Like this.");
+            // behold the map function for distributed word counting
+            callback(null, "("+(function(key, value) {
+                
+                // NOTE that we already do some grouping here. Courtesy of javascript.
+                // This reduces data transfer, too
+                var words, i, l, unique_word,
+                    unique_word_counts = {},
+                    results = [];
+
+                self.postMessage("Running map on input key '"+key+"'");
+                // hardcore normalization. strip non-characters
+                value = value.toLowerCase();
+                value = value.replace(/[^a-z]+/g, ' ');
+                words = value.split(" ");
+                for (i=0, l=words.length; i<l; i++) {
+                    if (unique_word_counts[words[i]] === undefined) {
+                        unique_word_counts[words[i]] = 0;
+                    }
+                    unique_word_counts[words[i]] ++;
+                }
+                
+                for (unique_word in unique_word_counts) {
+                    results.push({key: unique_word, value:unique_word_counts[unique_word]});
+                }
+                
+                self.postMessage("Map for input '"+key+"' done. Found "+l+" (non-distinct) words.");
+
+                this.done = true;
+                this.results = results;
+            }).toString()+")");
         });
     };
     /**

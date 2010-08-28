@@ -49,6 +49,9 @@ module.exports = (function() {
      */
     app.post("/job/:job_id", function(req, res) {
 
+        console.log("Received results");
+        console.log(sys.inspect(req.body));
+
         // remember, the second part of the job_id is the type
         var parts = req.params.job_id.split("_"),
             problem_id = parts[0],
@@ -88,7 +91,7 @@ module.exports = (function() {
      * Returns the map function for a problem
      */
     app.get("/map/:problem_id", function(req, res) {
-        dataa.getMapForProblem(function(err, code) {
+        dataa.getMapForProblem(req.params.problem_id, function(err, code) {
             if (err) {
                 res.send(err.message + "\n" + err.stack, 500);
             } else {

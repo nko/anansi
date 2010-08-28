@@ -13,6 +13,7 @@ app.configure(function() {
     app.use(express.logger({
         format: ':method :url'
     }));
+    app.use(express.bodyDecoder());
     app.set('view engine', 'jade');
     app.use(express.staticProvider(__dirname + '/public'));
 });
