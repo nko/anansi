@@ -17,17 +17,24 @@ app.get('/', function(req, res) {
 
 /* Form to create problem */
 app.get('/problem', function(req, res) {
+    // TODO create object here
     res.render('problem/new');
 });
 
 /* Get a specific problem */
-app.get('/problem/:id', function(req, res){
-    res.send('get problem '+req.params.id);
+app.get('/problem/:id', function(req, res) {
+    // TODO get object here
+    res.render('problem/show', {
+        locals: {
+            problem: { name: 'Problem 1' }
+        }
+    });
 });
 
 /* This is where the problem is actually created */
 app.post('/problem', function(req, res){
-    res.send('create problem');
+    var id = 1;
+    res.redirect('/problem/'+id);
 });
 
 app.listen(3000);

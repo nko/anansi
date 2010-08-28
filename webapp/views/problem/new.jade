@@ -1,12 +1,27 @@
 form(action="/problem", method="post")
-  div.form-field
+  .form-field
+    .step 1
     label(for="problem_name") Problem Name
-    input(name="problem_name", id="problem_name")
+    input(type="text", name="problem_name", id="problem_name")
+    .instructions This is just for your reference later
 
-  div.form-field
-    label(for="problem_name") Algorithm
-    input(name="problem_name", id="problem_name")
+  .form-field
+    .step 2
+    label(for="problem_algorithm_map_function") Map Algorithm
+    textarea(cols="3", type="text", name="problem_algorithm_map_function", id="problem_algorithm_map_function")
+    .instructions Should look like function map(key, value) { ... }
 
-  div.form-field
-    label(for="problem_name") Problem Name
-    input(name="problem_name", id="problem_name")
+  .form-field
+    .step 3
+    label(for="problem_algorithm_reduce_function") Reduce Algorithm
+    textarea(cols="3", type="text", name="problem_algorithm_reduce_function", id="problem_algorithm_reduce_function")
+    .instructions Should look like function reduce(key, values) { ... }
+
+  .form-field
+    .step 4
+    label(for="problem_inputs") Inputs
+    textarea(cols="3", type="text", name="problem_inputs", id="problem_inputs")
+    .instructions JSON object of keys and values. We'll use this as the initial values for the map function.
+    
+  .form-field.submit 
+    input(type="submit", id="problem_submit", value="Next")
