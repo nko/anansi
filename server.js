@@ -1,8 +1,11 @@
 var express = require('express'),
 	sys = require('sys'),
-	fs = require('fs');
+	fs = require('fs'),
+    pg = require('postgres');
+var puts = sys.puts;
 
 var listenPort = 80;
+var c = pg.createConnection("host='' dbname=anansi");
 
 var app = express.createServer();
 
@@ -12,11 +15,16 @@ app.configure(function(){
     app.use(express.staticProvider(__dirname + '/public'));
 });
 app.configure('development', function(){
-    listenPort = 3000;
+    //listenPort = 3000;
 });
 
 /* Homepage */
 app.get('/', function(req, res) {
+    // var problems = Problem.findAll(c);
+    c.query("select * from problems;", function (err, rows) {
+        if (err) throw err;
+        puts(rows)
+    });
 	res.render('index');
 });
 
