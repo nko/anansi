@@ -27,7 +27,7 @@ form(action="/problem", method="post")
   .form-field(class=(problem && problem.has_error('data') ? " error" : ""))
     .step 4
     label(for="problem_inputs") Inputs
-    textarea(cols="3", type="text", name="data", id="problem_inputs", disabled="disabled")
+    textarea(cols="3", type="text", name="data", id="problem_inputs")
     .instructions JSON object of keys and values. We'll use this as the initial values for the map function.
     
   .form-field.submit 

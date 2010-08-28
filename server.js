@@ -67,7 +67,7 @@ var Problem = function(opts) {
     this.created_at = opts.created_at || (new Date().getTime());
     this.map_function = opts.map_function;
     this.reduce_function = opts.reduce_function;
-    this.data = opts.data || {};
+    this.data = JSON.parse(opts.data) || {};
     this.type = 'problem';
     this.errors = [];
 };
