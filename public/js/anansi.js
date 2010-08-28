@@ -11,8 +11,64 @@ var runner = {
     current_job: null,
     algorithm: null, // can be either a map or reduce function
     runtime_data: null,
+    cu_per_s: 0, // computing units per second
     interval_break: 100, //ms
     
+
+    /**
+     * here is an arbitrary definition:
+     * the time it takes to 
+     */
+    speedTest: function() {
+
+        
+        var sqrt = function(x) {
+            var j = x / 2;
+            var min = 0;
+            var max = x;
+            for (var i=0; i<100; i++) {
+                if (j * j > x) {
+                    max = j;
+                } else {
+                    min = j;
+                }
+                // print(max - min);
+                j = max - ((max - min)/2);
+            }
+            return j;
+        };
+        
+
+        
+        var threshold = 4000, // ms
+            num = 2, repeat = 1000000;
+            
+        // TODO find a better benchmark, this is ridiculous
+        var end_time,
+            start_time = new Date().getTime();
+
+        /**
+         * let the execution of the following task be a computing unit
+         */
+        for (var i=0; i<repeat; i++) {
+            sqrt(num);
+            
+            if((i%10 === 0) && (new Date().getTime() - start_time) > threshold) {
+                // bad luck, we're out of time
+                // estimate how long the task would have taken
+                end_time = Math.floor(new Date().getTime() + (repeat-i)*((new Date().getTime() - start_time)/i));
+                self.postMessage("Estimating performance!");
+                break;
+            }
+            if (i === repeat-1) {
+                end_time = new Date().getTime();
+            }
+        }
+
+        var delta = end_time - start_time;
+        runner.cu_per_s = 1000/delta;
+        self.postMessage("Established Computing Units /s: "+runner.cu_per_s.toString().substr(0,5));
+    },
 
     /**
      * Gets a job
@@ -51,6 +107,7 @@ var runner = {
         runner.runJob();
         
     },
+    
     
     /**
      * Runs the job by applying the current algorithm repetitively on a runtime_data object
@@ -149,7 +206,10 @@ self.addEventListener('message', function(event) {
         case "start":
             self.postMessage("Starting runner now ...");
             // magic. begins. here.
-            runner.getJob();
+            runner.speedTest();
+            
+            // speedTest will take a while, let's not get the long-running script warning
+            setTimeout(runner.getJob(), 100);
             break;
         
     }
