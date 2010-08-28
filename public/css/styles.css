@@ -1,11 +1,3 @@
-/******************************************************************/
-/** CSS                                                           */
-/** = GLOBAL                                                      */
-/** = LAYOUT                                                      */
-/** = FORM                                                        */
-/******************************************************************/
-
-/** =RESET                                                        */
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, font, img, kbd, q, s, samp,
 small, strike, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
 margin: 0; padding: 0; border: 0; outline: 0; font-weight: inherit; font-style: inherit; font-size: 100%; font-family: inherit; vertical-align: baseline; }
@@ -17,38 +9,34 @@ caption, th, td { text-align: left; font-weight: normal; }
 blockquote:before, blockquote:after, q:before, q:after { content: ""; }
 blockquote, q { quotes: "" ""; }
 
-/** =GLOBAL                                                       */
-body {
-  background: #222;
-  font-family: 'Helvetica', Arial, sans-serif;
-  padding: 0;
-  text-align: center;
+html {
+	text-align: center;
+	background: #f9f9f9 url('../images/body.jpg') repeat-x top left;
+	font-family: helvetica, arial, sans-serif;
+	padding: 0;
+	margin: 0;
 }
 
-/** =LAYOUT                                                       */
+body {
+}
+
 #container {
-  background: #fff;
-  margin: 30px auto;
-  text-align: left;
-  width: 600px;
-  border-radius: 12px;
-  -moz-border-radius: 12px;
-  -webkit-border-radius: 12px;
-  box-shadow: 0 0 10px #333;
-  -moz-box-shadow: 0 0 10px #333;
-  -webkit-box-shadow: 0 0 10px #333;
+	margin: 20px auto 20px;
+	text-align: left;
+	width: 1000px;
+	padding: 0 
 }
-#header {
-  border-bottom: 2px solid #222;
-  padding: 20px;
+
+h1 a, h1 a:visited {
+	display: block;
+	width: 276px;
+	height: 70px;
+	text-indent: 9000px;
+	background: #fff url('../images/logo.png') no-repeat top left;
+	margin-left: -10px;
 }
-  #header h1 {
-    font-size: 30px;
-  }
-  #header .tagline {
-    color: #555;
-    font-size: 12px;
-  }
+
+h1 a:hover { opacity: .9; }
 #nav {
   border-bottom: 2px solid #222;
   padding: 10px 0;
@@ -66,14 +54,30 @@ body {
       -moz-box-shadow: 0 0 5px #999;
       -webkit-box-shadow: 0 0 5px #999;
     }
+
 #content {
-  padding: 20px;
+	padding: 20px;
 }
+
 #footer {
-  border-top: 2px solid #222;
-  color: #555;
-  font-size: 12px;
-  padding: 20px;
+	background-color: #131313;
+	color: #f9f9f9;
+	font-size: 10px;
+	padding: 10px 20px 11px;
+	text-align: center;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+}
+
+#footer a, #footer a:visited {
+	text-decoration: none;
+	color: #0aa3f4;
+}
+
+#footer a:hover {
+	text-decoration: underline;
+	color: #fff;
 }
 
 /** =FORM                                                         */
