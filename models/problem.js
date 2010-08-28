@@ -1,12 +1,14 @@
-mongoose.model('Problem', {
-	
-	properties: ['name', 'mapAlgorithm', 'reduceAlgorithm', 'inputs', 'results', 'status', 'updated_at'],
+var mongoose = require('mongoose').Mongoose;
 
-	methods: {
-		save: function(fn) {
-			this.updated_at = new Date();
-			this.__super__(fn);
-		}
-	},
+mongoose.model('Problem', {
+    
+    properties: ['name', 'map_algorithm', 'reduce_algorithm', 'status', 'updated_at'],
+
+    methods: {
+        save: function(fn) {
+            this.updated_at = new Date();
+            this.__super__(fn);
+        }
+    }
 
 });
