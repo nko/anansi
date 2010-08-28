@@ -3,7 +3,8 @@ var express = require('express'),
     fs = require('fs'),
 	listenPort = 3000,
 	app = express.createServer(),
-    _ = require('./lib/underscore')._;
+    _ = require('./lib/underscore')._,
+    Problem = require('./models/problem').Problem;
 
 var cradle = require('cradle'),
     c = new(cradle.Connection)('maprejuice.couchone.com'),
@@ -59,44 +60,6 @@ app.configure(function() {
 });
 
 app.use("/workers", require("./worker_api.js"));
-
-var Problem = function(opts) {
-    this.id = opts.id || opts['_id'];
-    this.name = opts.name;
-    this.status = opts.status || 'queued';
-    this.created_at = opts.created_at || (new Date().getTime());
-    this.map_function = opts.map_function;
-    this.reduce_function = opts.reduce_function;
-    if (opts.data) {
-        if (typeof opts.data === 'string') {
-            this.data = JSON.parse(opts.data)
-        } else { // already JSON
-            this.data = opts.data;
-        }
-    } else {
-        this.data = {};
-    }
-    this.type = 'problem';
-    this.errors = [];
-};
-Problem.prototype.validate = function() {
-    if (!this.name || this.name.trim() == '') {
-        this.errors.push({field: 'name', message: "Problem Name can't be blank"})
-    }
-    if (!this.map_function || this.map_function.trim() == '') {
-        this.errors.push({field: 'map_function', message: "Map Function can't be blank"})
-    }
-    if (!this.reduce_function || this.reduce_function.trim() == '') {
-        this.errors.push({field: 'reduce_function', message: "Reduce Function can't be blank"})
-    }
-    return !this.has_errors();
-};
-Problem.prototype.has_errors = function() {
-    return this.errors.length != 0;
-};
-Problem.prototype.has_error = function(field_name) {
-    return _.any(this.errors, function (item) { return item.field == field_name; }, field_name);
-};
 
 /* Redirect to correct URL on every request */
 app.get(/.*/, function (req, resp, next) {
