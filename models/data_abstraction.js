@@ -3,12 +3,24 @@ module.exports = (function() {
     that = {};
 
     /**
-     * Returns all values for a given key after the map step
+     * Returns all values for a given key after the reduce step
      *  - the key is only unique within a given problem
-     *  - returns an array of objects or primitives
+     *  - returns an array of objects or primitivesc
      *  - calls callback(err, values)
      */
     that.getResultsByKey = function(problem_id, key, callback) {
+        // e.g. word frequencies
+        process.nextTick(function() {
+            callback(null, [15]);
+        });
+    };
+    /**
+     * Same as above, except it returns k,v pairs that come out of the map step.
+     *  - technically this means we take rows from the data table where type="reduce"
+     * NOTE: half of the "group" step is hidden in here. We have a number of key-value pairs in the db
+     *       and now we group them into a {key: array, ...} map
+     */
+    that.getReduceInputForKey = function(problem_id, key, callback) {
         // e.g. word frequencies
         process.nextTick(function() {
             callback(null, [1, 4, 5, 2, 3]);
@@ -21,23 +33,34 @@ module.exports = (function() {
      *  - returns an object or primitive
      *  - calls callback(err, value)
      */
-    that.getInputForKey = function(problem_id, key, callback) {
+    that.getMapInputForKey = function(problem_id, key, callback) {
         process.nextTick(function() {
             callback(null, "This is a random sentence where some words occur more than one time. Like this.");
         });
     };
 
     /**
-     * Emits a result for a given key and problem
-     *  - value is a primitive or object
-     *  - the value can later be retrieved as one of the elements of getResultsByKey(problem_id, key)
+     * Emits an intermediate result for a given key and problem
+     *  - results is an array of {key: key, value:value}
+     *  - the k,v pairs are saved in the data table with type = "intermediate"
      *  - calls callback(err)
      */
-    that.emit = function(problem_id, key, value, callback) {
+    that.emitFromMap = function(problem_id, results, callback) {
         process.nextTick(function() {
             callback();
         });
     };
+    /**
+     * Same as above except saved with type = "result".
+     * The reason we have this distinction is because we want to clearly mark the results that we
+     * need to keep. Clearly this is not the best approach ;)
+     */
+    that.emitFromReduce = function(problem_id, results, callback) {
+        process.nextTick(function() {
+            callback();
+        });
+    };
+
 
     /**
      * Other random functions I need. Maybe those can be handled in the model abstractions:
@@ -69,7 +92,7 @@ module.exports = (function() {
      * Gets the next job from the jobs table.
      *  - calls callback(err, job)
      */
-    that.getNextJob = function() {
+    that.getNextJob = function(callback) {
         process.nextTick(function() {
             callback(null, {
                 id: "some_job_id",
@@ -95,7 +118,7 @@ module.exports = (function() {
             }); // no error happened
         });
     };
-    
+
     /**
      * Returns the a list of jobs for this problem that are done, running or enqueued
      */
@@ -121,6 +144,25 @@ module.exports = (function() {
             }); // no error happened
         });
     };
+    
+    
+    /**
+     * Returns the map algorithm for a given problem id.
+     */
+    that.getMapForProblem = function(problem_id, callback) {
+        process.nextTick(function() {
+            callback(null, "This is a random sentence where some words occur more than one time. Like this.");
+        });
+    };
+    /**
+     * Returns the map algorithm for a given problem id.
+     */
+    that.getReduceForProblem = function(problem_id, callback) {
+        process.nextTick(function() {
+            callback(null, "This is a random sentence where some words occur more than one time. Like this.");
+        });
+    };
+
 
     return that;
 
