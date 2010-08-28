@@ -67,7 +67,15 @@ var Problem = function(opts) {
     this.created_at = opts.created_at || (new Date().getTime());
     this.map_function = opts.map_function;
     this.reduce_function = opts.reduce_function;
-    this.data = JSON.parse(opts.data) || {};
+    if (opts.data) {
+        if (typeof opts.data === 'string') {
+            this.data = JSON.parse(opts.data)
+        } else { // already JSON
+            this.data = opts.data;
+        }
+    } else {
+        this.data = {};
+    }
     this.type = 'problem';
     this.errors = [];
 };
@@ -94,7 +102,6 @@ Problem.prototype.has_error = function(field_name) {
 app.get(/.*/, function (req, resp, next) {
     var host = req.header('host');
     var path = req.url;
-    sys.puts('host => '+host+", path => "+path);
     if (host == 'www.maprejuice.com' || host == 'anansi.no.de') {
         resp.redirect("http://maprejuice.com"+path, 301);
     } else {
