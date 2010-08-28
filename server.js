@@ -76,7 +76,7 @@ app.get(/.*/, function (req, resp, next) {
     var path = req.url;
     sys.puts('host => '+host+", path => "+path);
     if (host == 'www.maprejuice.com' || host == 'anansi.no.de') {
-        resp.redirect("http://maprejuice.com#{path}", 301);
+        resp.redirect("http://maprejuice.com"+path, 301);
     } else {
         next();
     }
