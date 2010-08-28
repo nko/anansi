@@ -14,13 +14,13 @@ form(action="/problem", method="post")
 
   .form-field(class=(problem && problem.has_error('map_function') ? " error" : ""))
     .step 2
-    label(for="problem_map_algorithm") Map Algorithm
+    label(for="problem_map_algorithm") Map Function
     textarea(cols="3", type="text", name="map_function", id="problem_algorithm_map_function")
     .instructions Should look like function map(key, value) { ... }
 
   .form-field(class=(problem && problem.has_error('reduce_function') ? " error" : ""))
     .step 3
-    label(for="problem_reduce_algorithm") Reduce Algorithm
+    label(for="problem_reduce_algorithm") Reduce Function
     textarea(cols="3", type="text", name="reduce_function", id="problem_algorithm_reduce_function")
     .instructions Should look like function reduce(key, values) { ... }
 
