@@ -11,7 +11,7 @@ var express = require('express'),
     dataa = require("./models/data_abstraction");
 
 var cradle = require('cradle'),
-    c = new(cradle.Connection)('maprejuice.couchone.com', 5984, {cache: false, raw: false}),
+    c = new(cradle.Connection)('maprejuice.couchone.com', 5984, {cache: true, raw: false}),
     db = c.database('maprejuice');
 
 var TEN_MINS_IN_MS = (1000 * 60 * 10);
@@ -206,7 +206,6 @@ app.get('/problem', function(req, res) {
 /* This is where the problem is actually created */
 app.post('/problem', function(req, resp) {
     // TODO sanitize the shit out of this. Make sure it's valid js etc
-    console.log(sys.inspect(req.body));
     var p = new Problem(req.body);
     if (p.validate()) {
         dataa.saveProblem(p, function (err, result) {
@@ -235,24 +234,35 @@ app.get('/problem/:id', function(req, resp) {
         if (err) {
             resp.redirect('/');
         } else {
-            console.log(sys.inspect(problem));
+//            console.log(sys.inspect(problem));
             problem.initial_data = JSON.stringify(problem.data);
             problem.is_queued = function() { return problem.status === 'queued'; };
-            problem.results = '';
-
-            db.view('datum/output', { startkey: problem.id, endkey: problem.id+"\ufff0" }, function (err, rowSet) {
-                for (var i in rowSet) {
-                    var row = rowSet[i].value;
-                    var resultNum = (parseInt(i, 10)+1);
-                    problem.results += resultNum + '. ' + row.key + ' = ' + row.values + '\n';
-                }
-                resp.render('problem/show.html', {
-                    problem: problem
-                });
+            
+            resp.render('problem/show.html', {
+                problem: problem
             });
         }
     });
 });
+
+app.get('/problem/:id/results', function(req, resp) {
+    // get object
+    dataa.findProblem(req.params.id, function (err, problem) {
+        if (err) {
+            resp.send({});
+        } else {
+            db.view('datum/output', { key: problem.id }, function (err, rowSet) {
+                var results = {};
+                for (var i in rowSet) {
+                    var row = rowSet[i].value;
+                    results[row.key] = row.values;
+                }
+                resp.send(results);
+            });
+        }
+    });
+});
+
 
 
 /* Kick off the specified problem by queing up all the jobs for it */
