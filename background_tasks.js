@@ -8,7 +8,7 @@ var cron = require('cron'),
 exports.backgroundTasks = [];
 
 exports.backgroundTasks.push(
-        new cron.CronJob('* * * * */6 *', function() {
+        new cron.CronJob('* * * * 0,10,20,30,40,50 0', function() {
             sys.puts('You will see this message every minute');
             dataa.getOldTasksWithoutResults(function (job) {
                 sys.puts("hit this");
