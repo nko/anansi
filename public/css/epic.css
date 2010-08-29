@@ -36,6 +36,27 @@ a:hover { color: #1062be; text-decoration: underline; }
 
 #header {
 	margin-top: -5px !important;
+	position: relative;
+}
+
+#joyent_badge {
+	display: block;
+	width: 92px;
+	height: 26px;
+	background: transparent url('/images/joyent.png') no-repeat top left;
+	text-indent: -9000px;
+	float: right;
+	margin-top: -6px;
+}
+
+#joyent_badge:hover { opacity: .9; }
+
+#thank_god {
+	position: absolute;
+	width: 220px;
+	top: 25px;
+	right: 20px;
+	padding-top: 5px;
 }
 
 #logo {
