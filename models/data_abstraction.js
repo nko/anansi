@@ -3,7 +3,7 @@ var sys = require('sys'),
     Job = require('./job').Job,
     Datum = require('./datum').Datum,
     cradle = require('cradle'),
-    c = new(cradle.Connection)('maprejuice.couchone.com'),
+    c = new(cradle.Connection)('maprejuice.couchone.com', 5984, {cache: false, raw: false}),
     db = c.database('maprejuice');
 
 module.exports = (function() {
@@ -35,9 +35,11 @@ module.exports = (function() {
     };
 
     that.saveJob = function(job, callback) {
-        if (job.id) {
-            // hackety hack chop chop
-            db.save(job.id, job, callback);
+        sys.puts('job id => '+job.id);
+        sys.puts('job rev => '+job.rev);
+        sys.puts('job status => '+job.status);
+        if (job.id) { // hackety hack chop chop
+            db.save(job.id, job.rev, job, callback);
         } else {
             db.insert(job, callback);
         }
@@ -52,7 +54,7 @@ module.exports = (function() {
 
     that.saveProblem = function(problem, callback) {
         if (problem.id) {
-            db.save(problem.id, problem, callback);
+            db.save(problem.id, problem.rev, problem, callback);
         } else {
             db.insert(problem, callback);
         }
@@ -84,7 +86,7 @@ module.exports = (function() {
                     // create new array, consisting of old values, plus new one
                     existingDatum.values.push(datum.values);
                 }
-                db.save(id, existingDatum, function (err, result) {
+                db.save(id, existingDatum.rev, existingDatum, function (err, result) {
                     callback(null, result);
                 });
             }

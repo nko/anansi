@@ -3,8 +3,8 @@
  * @param opts
  */
 exports.Datum = function(opts) {
-    this.id = opts.id || opts['_id'];
-    this.rev = opts.rev || opts['_rev'];
+    this.id = opts['_id'] || opts.id;
+    this.rev = opts['_rev'] || opts.rev;
     this.key = opts.key;
     this.problemId = opts.problemId;
     if (opts.values) {
