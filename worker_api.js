@@ -72,9 +72,6 @@ module.exports = function(socketio) {
                 // });
 
             }
-            res.send('hello');
-        /*
-        */
         });
     });
 
@@ -88,6 +85,7 @@ module.exports = function(socketio) {
 
         dataa.findJob(req.params.jobId, function (err, job) {
             if (job) {
+                
                 var results = req.body;
                 // create a datum for each k,v pair
                 Step(
@@ -150,7 +148,7 @@ module.exports = function(socketio) {
                                                         })                                                        
                                                     }
                                                 }
-                                            } 
+                                            }
                                             res.send("ok");
                                             return;
                                         });
