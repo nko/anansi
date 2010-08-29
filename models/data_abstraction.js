@@ -12,7 +12,7 @@ module.exports = (function() {
 
     that.hasUnfinishedJobsByProblemId = function(problemId, callback) {
         db.view('jobs/unfinished', {key: problemId}, function (err, rowSet) {
-            callback(rowSet && rowSet.length > 0);
+            callback(err, rowSet && rowSet.length > 0);
         });
     };
 
