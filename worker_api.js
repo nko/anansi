@@ -85,7 +85,6 @@ module.exports = (function() {
                         // mark job as  done
                         job.status = 'completed';
                         //job.status = 'queued';
-                        
                         dataa.saveJob(job, group());
                         
                         for (var i=0, l=results.length; i<l; i++) {
@@ -133,8 +132,8 @@ module.exports = (function() {
                                                             problem_id: job.problem_id,
                                                             algorithm: problem.reduce_function,
                                                             algorithm_type: 'reduce',
-                                                            input: input,
-                                                        }), function(err) {
+                                                            input: input
+                                                        }), function(err, res) {
                                                             // i don't care
                                                         })                                                        
                                                     }
