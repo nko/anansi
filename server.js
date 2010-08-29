@@ -175,7 +175,7 @@ app.get('/recently_solved', function(req, res) {
 		{name: "Brandon Account", percentage: "18", url: "/"},
 		{name: "Ryan Theories", percentage: "95", url: "/"},
 		{name: "Tons of Sharks", percentage: "38", url: "/"},
-		{name: "Traveling Salesman", percentage: "0", url: "/"},
+		{name: "Traveling Salesman", percentage: "0", url: "/"}
 	]));
 });
 
