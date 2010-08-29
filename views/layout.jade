@@ -5,22 +5,27 @@ html
     link(href="/css/styles.css", rel="stylesheet")
   body
     #container
-      h1
-        a(href="/") MapRejuice
-      #nav
-        dl
-          dt Navigation
-          dd
-            a(href="/") Home
-          dd
-            a(href="/") Problems
+      a(href="http://nodeknockout.com/teams/anansi", target="nko", title="Help us win the Node.js KO!", id="nodekobtn")
+      #sidebar
+        h1
+          a(href="/") MapRejuice
+        #nav
+          dl(id="get_started")
+            dt Get Started
+            dd
+              a(href="/") Home
+            dd
+              a(href="/") Current Problems
+            dd
+              a(href="/problem", class="more-link") Start a New Problem
+          dl(id="developers_developers_developers_developers")
+            dt Developers, Developers...
+            dd
+              a(href="/developers") Join Our Network
       #content
         != body
       #footer
         | Created by <a href="http://twitter.com/shiftb" title="Brandon on Twitter" target="_blank">Brandon Leonardo</a>, <a href="http://twitter.com/jonashuckestein" title="Jonas on Twitter" target="_blank">Jonas Huckestein</a>, and <a href="http://twitter.com/ryanmcgrath" title="Ryan on Twitter" target="_blank">Ryan McGrath</a>. &copy; 2010 and junk.
       
-      a(href="http://nodeknockout.com/teams/anansi", target="nko", title="Help me win Node.js KO!")
-        img(style="position: fixed; top: 5px; right: 5px; border: 0px;", src="http://nodeknockout.com/images/voteko.png", alt="Help us win Node.js KO!")
-  
   script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js", type="text/javascript")
   script(src="/js/core.js", type="text/javascript")
