@@ -300,6 +300,13 @@ app.get('/jobs/queued', function(req, res) {
             });
 });
 
+app.get('/code', function(req, resp) {
+    var code = "<iframe src=\"http://maprejuice.com/js/test.html\"></iframe>";
+    resp.render('code.html', {
+        code: code
+    });
+});
+
 
 
 // Listen on 80? Really?
