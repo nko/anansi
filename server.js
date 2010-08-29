@@ -11,7 +11,7 @@ var express = require('express'),
     dataa = require("./models/data_abstraction");
 
 var cradle = require('cradle'),
-    c = new(cradle.Connection)('maprejuice.couchone.com'),
+    c = new(cradle.Connection)('maprejuice.couchone.com', 5984, {cache: false, raw: false}),
     db = c.database('maprejuice');
 
 var TEN_MINS_IN_MS = (1000 * 60 * 10);
@@ -30,111 +30,111 @@ app.configure(function() {
 	});
     
 	//app.set('view engine', 'mustache');
-    
-	app.use(express.staticProvider(__dirname + '/public'));
+
+    app.use(express.staticProvider(__dirname + '/public'));
 
     // set up database if it doesn't exist
     db.exists(function (err, res) {
         if (!res) {
-            db.create();
-        }
-    });
+            db.create(function (err, res) {
+                // set up problem views
+                db.insert('_design/problems', {
+                    all: {
+                        map: function (doc) {
+                            if (doc.type && doc.type == 'problem') {
+                                emit(null, doc);
+                            }
+                        }
+                    },
+                    queued: {
+                        map: function (doc) {
+                            if (doc.type && doc.type == 'problem' && doc.status && doc.status == 'queued') {
+                                emit(null, doc);
+                            }
+                        }
+                    },
+                    running: {
+                        map: function (doc) {
+                            if (doc.type && doc.type == 'problem' && doc.status && doc.status == 'running') {
+                                emit(null, doc);
+                            }
+                        }
+                    },
+                    complete: {
+                        map: function (doc) {
+                            if (doc.type && doc.type == 'problem' && doc.status && doc.status == 'complete') {
+                                emit(null, doc);
+                            }
+                        }
+                    }
+                });
 
-    // set up problem views
-    db.insert('_design/problems', {
-        all: {
-            map: function (doc) {
-                if (doc.type && doc.type == 'problem') {
-                    emit(null, doc);
-                }
-            }
-        },
-        queued: {
-            map: function (doc) {
-                if (doc.type && doc.type == 'problem' && doc.status && doc.status == 'queued') {
-                    emit(null, doc);
-                }
-            }
-        },
-        running: {
-            map: function (doc) {
-                if (doc.type && doc.type == 'problem' && doc.status && doc.status == 'running') {
-                    emit(null, doc);
-                }
-            }
-        },
-        complete: {
-            map: function (doc) {
-                if (doc.type && doc.type == 'problem' && doc.status && doc.status == 'complete') {
-                    emit(null, doc);
-                }
-            }
-        }
-    });
+                // set up problem views
+                db.insert('_design/jobs', {
+                    all: {
+                        map: function (doc) {
+                            if (doc.type && doc.type === 'job') {
+                                emit(doc.created_at, doc);
+                            }
+                        }
+                    },
+                    unfinished: {
+                        map: function (doc) {
+                            if (doc.type && doc.type === "job"
+                                    && doc.status && (doc.status === "queued" || doc.status === "processing")
+                                    && !doc.datumId) {
+                                // set problem id as key so we can query by this later
+                                emit(doc.problem_id, doc);
+                            }
+                        }
+                    },
+                    queued: {
+                        map: function (doc) {
+                            if (doc.type && doc.type === "job" && doc.status && doc.status === "queued") {
+                                emit(doc.created_at, doc);
+                            }
+                        }
+                    },
+                    stale: {
+                        map: function (doc) {
+                            if (doc.type && doc.type == 'job'
+                                    && doc.status && doc.status == 'processing'
+                                    && doc.created_at && doc.created_at < (new Date().getTime() - TEN_MINS_IN_MS)) {
+                                emit(doc.created_at, doc);
+                            }
+                        }
+                    }
+                });
 
-    // set up problem views
-    db.insert('_design/jobs', {
-        all: {
-            map: function (doc) {
-                if (doc.type && doc.type === 'job') {
-                    emit(doc.created_at, doc);
-                }
-            }
-        },
-        unfinished: {
-            map: function (doc) {
-                if (doc.type && doc.type === "job"
-                        && doc.status && (doc.status === "queued" || doc.status === "processing")
-                        && !doc.datumId) {
-                    // set problem id as key so we can query by this later
-                    emit(doc.problem_id, doc);
-                }
-            }
-        },
-        queued: {
-            map: function (doc) {
-                if (doc.type && doc.type === "job" && doc.status && doc.status === "queued") {
-                    emit(doc.created_at, doc);
-                }
-            }
-        },
-        stale: {
-            map: function (doc) {
-                if (doc.type && doc.type == 'job'
-                        && doc.status && doc.status == 'processing'
-                        && doc.created_at && doc.created_at < (new Date().getTime() - TEN_MINS_IN_MS)) {
-                    emit(doc.created_at, doc);
-                }
-            }
-        }
-    });
+                // set up problem views
+                db.insert('_design/datum', {
+                    all: {
+                        map: function (doc) {
+                            if (doc.type && doc.type === 'datum') {
+                                emit(null, doc);
+                            }
+                        }
+                    },
+                    intermediate: {
+                        map: function (doc) {
+                            if (doc.type && doc.type === 'datum'
+                                    && doc.dataType && doc.dataType == 'intermediate') {
+                                emit(doc.problemId, doc);
+                            }
 
-    // set up problem views
-    db.insert('_design/datum', {
-        all: {
-            map: function (doc) {
-                if (doc.type && doc.type === 'datum') {
-                    emit(null, doc);
-                }
-            }
-        },
-        intermediate: {
-            map: function (doc) {
-                if (doc.type && doc.type === 'datum'
-                        && doc.dataType && doc.dataType == 'intermediate') {
-                    emit(doc.problemId, doc);
-                }
+                        }
+                    },
+                    output: {
+                        map: function (doc) {
+                            if (doc.type && doc.type === 'datum'
+                                    && doc.dataType && doc.dataType == 'output') {
+                                emit(doc.problemId, doc);
+                            }
 
-            }
-        },
-        output: {
-            map: function (doc) {
-                if (doc.type && doc.type === 'datum'
-                        && doc.dataType && doc.dataType == 'output') {
-                    emit(doc.problemId, doc);
-                }
-
-            }
+                        }
+                    }
+                });
+            });
         }
     });
 
@@ -201,7 +201,7 @@ app.post('/problem', function(req, resp) {
     console.log(sys.inspect(req.body));
     var p = new Problem(req.body);
     if (p.validate()) {
-        db.insert(p, function (err, result) {
+        dataa.saveProblem(p, function (err, result) {
             resp.redirect('/problem/' + result.id);
         });
      } else {
@@ -252,8 +252,9 @@ app.get('/problem/:id/start', function(req, resp) {
                     });
                 }
             }
+
             p.status = 'running';
-            db.save(p.id, p, function (err, result) {
+            dataa.saveProblem(p, function (err, result) {
                 sys.puts("save status => " + sys.inspect(result));
                 resp.redirect('/problem/'+req.params.id);
             });
