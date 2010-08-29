@@ -162,30 +162,5 @@ module.exports = (function() {
         });
     });
 
-    /**
-     * Returns the map function for a problem
-     */
-    app.get("/map/:problem_id", function(req, res) {
-        dataa.getMapForProblem(req.params.problem_id, function(err, code) {
-            if (err) {
-                res.send(err.message + "\n" + err.stack, 500);
-            } else {
-                res.send(code);
-            }
-        });
-    });
-    /**
-     * Returns the map function for a problem
-     */
-    app.get("/reduce/:problem_id", function(req, res) {
-        dataa.getReduceForProblem(req.params.problem_id, function(err, code) {
-            if (err) {
-                res.send(err.message + "\n" + err.stack, 500);
-            } else {
-                res.send(code);
-            }
-        });
-    });
-
     return app;
 })();
