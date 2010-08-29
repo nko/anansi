@@ -18,8 +18,6 @@ exports.Problem = function(opts) {
 			 */
 			this.data = opts.data;
 		}
-    } else {
-        this.data = {};
     }
 
     this.type = 'problem';
