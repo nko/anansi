@@ -21,13 +21,14 @@ module.exports = (function() {
      * Here's what a job look like:
      * 
      * {
-     *     id: "some_job_id",
-     *     problem_id: "some_problem_id",
-     *     type: "map",
-     *     enqueued_at: "ms since epoch",
-     *     input: {
-     *         key: "value"
-     *     }
+            id: "some_job_id",
+            problem_id: "some_problem_id",
+            algorithm: "function map(k,v) { ... }",
+            algorithm_type: "map",
+            created_at: "ms since epoch",
+            input: {
+                key: "value"
+            }
      * }
      *
      */
@@ -48,27 +49,70 @@ module.exports = (function() {
      * NOTE: The client is responsible for pulling a new job. We don't do any redirect vodoo or whatever
      * TODO: Do redirect vodoo. Let's squeeze out another 100ms of proc power
      */
-    app.post("/job/:job_id", function(req, res) {
+    app.post("/job/:jobId", function(req, res) {
 
         console.log("Received results");
         console.log(sys.inspect(req.body));
 
-        // remember, the second part of the job_id is the type
-        var parts = req.params.job_id.split("_"),
-            problem_id = parts[0],
-            job_type = parts[1];
+        dataa.findJob(req.params.jobId, function (err, job) {
+            if (job) {
+                var results = req.body.results;
+                var datum = new Datum({
+                    problemId: job.problem_id,
+                    key: results.key,
+                    values: results.values,
+                    dataType: (job.algorithm_type === 'map' ? 'intermediate' : 'output')
+                });
+                // save the current datum
+                dataa.saveDatum(datum, function (result) {
+                    // TODO: mark the job as completed
+                    job.status = 'completed';
+                    job.datumId = result.id;
+                    dataa.saveJob(job);
+                });
+                
+                // TODO: check if this was the last job in a map or reduce phase
+                dataa.hasUnfinishedJobsByProblemId(job.problem_id, function (hasUnfinishedJobs) {
+                    if (!hasUnfinishedJobs) {
+                        // kick off next step by
+                        // 1) find intermediate datum
+                        dataa.findProblem(job.problem_id, function (err, problem) {
+                            if (!err) {
+                                dataa.findIntermediateDataByProblemId(job.problem_id, function (err, data) {
+                                    if (!err) {
+                                        for (var i in data) {
+                                            // TODO 2) add a bunch of reduce jobs to the queue
+                                            var datum = data[i];
+                                            var job = new Job({
+                                                problem_id: job.problem_id,
+                                                algorithm: problem.reduce_function,
+                                                algorithm_type: 'reduce',
+                                                input: datum.values
+                                            });
+                                        }
+                                    } else { // we're done!
+                                        problem.status = 'completed';
+                                        dataa.saveProblem(problem);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+                // TODO: comp. below
+
+                // successful
+                res.send("ok");
+            } else {
+                res.send(err.message + "\n" + err.stack, 500);
+                // TODO mark this job as failed. roll it back. whatever
+            }
+        });
 
         var cb = function(err) {
             if (err) {
                 res.send(err.message + "\n" + err.stack, 500);
-
-                // TODO mark this job as failed. roll it back. whatever
             } else {
-                res.send("ok");
-
-                // TODO: mark the job as completed
-                // TODO: check if this was the last job in a map or reduce phase
-                // TODO: comp. below
                 /*
                     if (end_of_map_phase) {
                         dataa.buildReduceJobs(problem_id);
