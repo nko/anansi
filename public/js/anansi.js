@@ -5,7 +5,6 @@
  */
 
 var DEBUG = true;
-
 /*  Think of this as the core library... (jonas: yeah that's why have a file called core.js, too.)*/
 var runner = {
     /*  API/whatever key */
@@ -76,7 +75,7 @@ var runner = {
      * - checkout ou
      */
     getJob: function() {
-        
+        self.postMessage("running")
         if (runner.current_job) {
             if(DEBUG) self.postMessage("Stop calling getJob when a job is still running. That's stoopid");
             return;
@@ -87,7 +86,7 @@ var runner = {
         if (!job) {
             // see you soon?
             if(DEBUG) self.postMessage("Failed to get a job");
-            //setTimeout(runner.getJob, 2000);
+            setTimeout(function(){runner.getJob()}, 10000);
             return;
         }
         
@@ -130,6 +129,9 @@ var runner = {
         if(DEBUG) self.postMessage("Finished job id=" + runner.current_job.id + " after " + runner.runtime_data.iteration + " with result");
         //self.postMessage(runner.runtime_data.results);
         runner.req("/workers/job/"+runner.current_job.id, "POST", runner.runtime_data.results);
+        delete runner.current_job;
+        self.postMessage("about to run aga")
+        runner.getJob();
     },
     
 
@@ -152,6 +154,7 @@ var runner = {
 
         if (xhr.status !== 200) {
             if(DEBUG) self.postMessage("Received status " + xhr.status + " when " + method + "ing " + url);
+
             return false;
         }
 

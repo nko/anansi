@@ -113,7 +113,7 @@ module.exports = function(socketio) {
                     function() {
 
                         dataa.hasUnfinishedJobsByProblemId(job.problem_id, function (err, hasUnfinishedJobs) {
-
+                            res.send("ok");
                             if (!hasUnfinishedJobs) {
                                 // kick off next step by
                                 // 1) find intermediate datum
@@ -149,11 +149,9 @@ module.exports = function(socketio) {
                                                     }
                                                 }
                                             }
-                                            res.send("ok");
                                             return;
                                         });
                                     } else {
-                                        res.send("ok");
                                         return;
                                     }
                                 });
