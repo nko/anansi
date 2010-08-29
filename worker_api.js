@@ -50,7 +50,6 @@ module.exports = (function() {
      * TODO: Do redirect vodoo. Let's squeeze out another 100ms of proc power
      */
     app.post("/job/:jobId", function(req, res) {
-
         console.log("Received results");
         console.log(sys.inspect(req.body));
 
@@ -71,7 +70,7 @@ module.exports = (function() {
                     dataa.saveJob(job);
                 });
                 
-                // TODO: check if this was the last job in a map or reduce phase
+                // check if this was the last job in a map or reduce phase
                 dataa.hasUnfinishedJobsByProblemId(job.problem_id, function (hasUnfinishedJobs) {
                     if (!hasUnfinishedJobs) {
                         // kick off next step by
@@ -108,28 +107,6 @@ module.exports = (function() {
                 // TODO mark this job as failed. roll it back. whatever
             }
         });
-
-        var cb = function(err) {
-            if (err) {
-                res.send(err.message + "\n" + err.stack, 500);
-            } else {
-                /*
-                    if (end_of_map_phase) {
-                        dataa.buildReduceJobs(problem_id);
-                    } else if (all_done) {
-                        dataa.markProblemDone(problem_id);
-                    }
-                    */
-
-            }
-        };
-
-        // req.body.results contains [{key: key, value:value} ...]
-        if (job_type === "map") {
-            dataa.emitFromMap(req.params.job_id, req.body.results, cb);
-        } else if (job_type === "reduce") {
-            dataa.emitFromReduce(req.params.job_id, req.body.results, cb);
-        }
     });
 
     /**

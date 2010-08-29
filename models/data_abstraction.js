@@ -20,7 +20,7 @@ module.exports = (function() {
         db.view('datum/intermediate', {key: problemId}, function (err, rowSet) {
             var data = [];
             for (var i in rowSet) {
-                data.push(new Datum(rowSet[i]));
+                data.push(new Datum(rowSet[i].value));
             }
             callback(err, data);
         });
@@ -97,7 +97,7 @@ module.exports = (function() {
         db.view('/jobs/stale', function(err, rowSet) {
             if (!err) {
                 for (var i in rowSet) {
-                    var job = new Job(rowSet[i]);
+                    var job = new Job(rowSet[i].value);
                     callback(job);
                 }
             }
@@ -196,16 +196,14 @@ module.exports = (function() {
      */
     that.getNextJob = function(callback) {
         process.nextTick(function() {
-            callback(null, {
-                id: "problem123_map_567",
-                problem_id: "problem123",
-                type: "map",
-                enqueued_at: new Date().getTime() - 100000,
-                input: {
-                    key: "some_document",
-                    value: "There are two kinds of people. Those who understand binary and those who do not"
+            db.view('jobs/queued', function(err, rowSet) {
+                if (err || !rowSet || rowSet.length == 0) {
+                    callback(err, null);
+                } else {
+                    var nextJob = new Job(rowSet[0].value);
+                    callback(err, nextJob);
                 }
-            }); // no error happened
+            });
         });
     };
 
