@@ -8,7 +8,8 @@ var express = require('express'),
 	Problem = require('./models/problem').Problem,
     Job = require('./models/job').Job;
     backgroundTasks = require('./background_tasks').backgroundTasks,
-    dataa = require("./models/data_abstraction");
+    dataa = require("./models/data_abstraction"),
+    io = require('socket.io');
 
 var cradle = require('cradle'),
     c = new(cradle.Connection)('maprejuice.couchone.com', 5984, {cache: true, raw: false}),
@@ -139,7 +140,10 @@ app.configure(function() {
     });
 });
 
-app.use("/workers", require("./worker_api"));
+
+var socketio = io.listen(app);
+
+app.use("/workers", require("./worker_api")(socketio));
 
 /* Redirect to correct URL on every request */
 app.get(/.*/, function (req, resp, next) {
@@ -335,7 +339,6 @@ app.get('/jobs/queued', function(req, res) {
 app.get('/code', function(req, resp) {
     resp.render('code.html');
 });
-
 
 
 // Listen on 80? Really?

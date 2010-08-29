@@ -14,7 +14,13 @@ var express = require("express"),
     Step = require("step"),
     Datum = require("./models/datum").Datum;
 
-module.exports = (function() {
+module.exports = function(socketio) {
+
+    var jobs_per_minute = 10;
+    setInterval(function(){
+        socketio.broadcast(JSON.stringify({time: new Date().getTime(), jobs_per_minute: Math.random()}));
+    }, 2000);
+
 
     var app = express.createServer();
 
@@ -169,4 +175,4 @@ module.exports = (function() {
     });
     //*/
     return app;
-})();
+};

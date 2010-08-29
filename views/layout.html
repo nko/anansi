@@ -5,9 +5,37 @@
     <title>MapRejuice - Distributed Computing at its finest</title>
 	<link rel="stylesheet" type="text/css" href="/css/epic.css" media="screen">
 	<script type="text/javascript" src="http://use.typekit.com/uxl8onc.js"></script>
+	<script type="text/javascript" src="/js/smoothie.js"></script>
+	<script type="text/javascript" src="/js/socket.io.js"></script>
 	<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
 	<script src="/js/core.js" type="text/javascript"></script>
+	<script type="text/javascript" charset="utf-8">
+	   $(function(){
+	       var socket = new io.Socket(window.location.hostname);
+	       socket.connect();
+	       socket.on("message", function(data) {
+               var data = JSON.parse(data);
+               jobs_per_minute.append(data.time, data.jobs_per_minute);
+	       });
+           var smoothie = new SmoothieChart({
+               grid: {
+                   strokeStyle:'rgb(125, 0, 0)',
+                   lineWidth: 1,
+                   millisPerLine: 250,
+                   verticalSections: 6,
+               },
+               labels: { fillStyle:'rgba(200, 200, 200, 1)' }
+           });
+           var jobs_per_minute = new TimeSeries();
+           smoothie.addTimeSeries(jobs_per_minute, {
+                strokeStyle:'rgb(0, 255, 0)',
+                fillStyle:'rgba(0, 255, 0, 0.4)',
+                lineWidth:3
+           });
+           smoothie.streamTo(document.getElementById("chartCanvas"), 2000);
+	   });
+	</script>
 </head>
 <body>
 	<div id="header" class="container">
