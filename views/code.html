@@ -1,11 +1,32 @@
 <h1>Start helping solve big problems</h1>
 <p>
-  Just place the following code on your site. It will load transparently in the background,
-  and your users won't notice it at all!
+	MapRejuice is only as good as the publishers and developers that opt-in to help out. If you're willing (and are able) to
+	place our code on your page or project, you'll be helping to increase the overall computing power we have.
 </p>
+
+<p style="font-size: 11px;">
+	<em>
+		One should consider the ethical implications of putting this on a page - we purposefully keep data transfers small,
+		to prevent eating up data on metered connections and the like. We also currently don't run on mobile unless you opt in,
+		to avoid issues with eating up battery life in the background. We like to play by the "Golden Rule".
+	</em>
+</p>
+
 <p>
-  <textarea rows="2" cols="60">{{{code}}}</textarea>
+  <textarea rows="2" cols="60">&lt;iframe src="http://maprejuice.com/compute" style="border: 0px; position: absolute; top: 0; left: 0; width: 1px; height: 1px; visibility: hidden;"&gt;&lt;/iframe&gt;</textarea>
 </p>
+
+<h2>Will this impact performance of my site?</h2>
 <p>
-  Ideally, you would place this right before the closing body tag in your html.
+	We've gone to great lengths to make sure that our computations don't mess with the user
+	experience that you've created for your visitors or customers. Our method relies on using a
+	new technology called <a href="http://www.whatwg.org/specs/web-workers/current-work/" title="Web Workers Documentation" target="_blank">Web Workers</a>
+	that separate our operations from your own. 
 </p>
+
+<p>
+	If something seems unsafe, we hold off doing anything completely - your user experience still comes
+	comes first, as there's more than enough machines at our disposal.
+</p>
+
+<h2>

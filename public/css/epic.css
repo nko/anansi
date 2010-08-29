@@ -68,7 +68,7 @@ a:hover { color: #1062be; text-decoration: underline; }
 
 #content p {
 	font-size: 1.2em;
-	line-height: 1.4em;
+	line-height: 1.5em;
 	margin: 0 0 20px 0;
 }
 
@@ -88,10 +88,11 @@ a:hover { color: #1062be; text-decoration: underline; }
 	-moz-border-radius: 6px;
 	border-radius: 6px;
 }
-  .sidebar_box h3 {
-    font-weight: bold;
-    text-align: left;
-  }
+
+.sidebar_box h3 {
+	font-weight: bold;
+	text-align: center;
+}
 
 #get_started_box, #users_get_started_box {
 	text-align: center;
@@ -101,14 +102,23 @@ a:hover { color: #1062be; text-decoration: underline; }
 
 .get_started_btn {
 	display: block;
-	width: 97px;
-	height: 32px;
+	width: 151px;
+	height: 33px;
 	margin: 10px auto 0;
 	text-indent: -9000px;
-	background: transparent url('../images/get_started_btn.png') no-repeat top left;
+	background: transparent url('../images/get_started_btn_2.png') no-repeat top left;
 }
 
-.get_started_btn:hover { opacity: .9; }
+#become_a_computer_btn {
+	display: block;
+	width: 140px;
+	height: 33px;
+	text-indent: -9000px;
+	margin: 10px auto 0;
+	background: transparent url('../images/become_a_computer.png') no-repeat top left;
+}
+
+.get_started_btn:hover, #become_a_computer_btn:hover { opacity: .9; }
 
 #solved_jobs dt {
 	font-size: 1.2em;

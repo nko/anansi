@@ -153,6 +153,10 @@ app.get(/.*/, function (req, resp, next) {
     }
 });
 
+app.get('/compute', function(req, res) {
+	res.render('embedded_compute.html');
+});
+
 /* Homepage */
 app.get('/', function(req, res) {
     /* Disabled temporarily
@@ -301,10 +305,7 @@ app.get('/jobs/queued', function(req, res) {
 });
 
 app.get('/code', function(req, resp) {
-    var code = "<iframe src=\"http://maprejuice.com/js/test.html\"></iframe>";
-    resp.render('code.html', {
-        code: code
-    });
+    resp.render('code.html');
 });
 
 
