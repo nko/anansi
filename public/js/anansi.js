@@ -4,7 +4,7 @@
  *	@Author: Ryan McGrath (ryan@venodesigns.net)
  */
 
-var DEBUG = false;
+var DEBUG = true;
 
 /*  Think of this as the core library... (jonas: yeah that's why have a file called core.js, too.)*/
 var runner = {
@@ -103,8 +103,7 @@ var runner = {
             results: [] // key -> value
         };
         
-        runner.runJob();
-        
+        runner.runJob();    
     },
 
     /**
