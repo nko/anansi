@@ -5,7 +5,8 @@ var express = require('express'),
 	app = express.createServer(),
     _ = require('./lib/underscore')._,
     Problem = require('./models/problem').Problem,
-    Job = require('./models/job').Job;
+    Job = require('./models/job').Job,
+    backgroundTasks = require('./background_tasks').backgroundTasks;
 
 var cradle = require('cradle'),
     c = new(cradle.Connection)('maprejuice.couchone.com'),

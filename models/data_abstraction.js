@@ -1,6 +1,27 @@
+var sys = require('sys'),
+    Problem = require('./problem').Problem,
+    Job = require('./job').Job,
+    cradle = require('cradle'),
+    c = new(cradle.Connection)('maprejuice.couchone.com'),
+    db = c.database('maprejuice');
+
 module.exports = (function() {
 
     that = {};
+
+    /**
+     * Returns all the tasks over 10 minutes old that haven't received a result yet.
+     */
+    that.getOldTasksWithoutResults = function(callback) {
+        db.view('/jobs/old', function(err, rowSet) {
+            if (!err) {
+                for (var i in rowSet) {
+                    var job = new Job(rowSet[i]);
+                    callback(job);
+                }
+            }
+        });
+    };
 
     /**
      * Returns all values for a given key after the reduce step
