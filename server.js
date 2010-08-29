@@ -18,7 +18,7 @@ var TEN_MINS_IN_MS = (1000 * 60 * 10);
     
 app.configure(function() {
     app.use(express.logger({
-        format: ':method :url'
+        format: ':method :url / :referrer'
     }));
     app.use(express.bodyDecoder());
 	
@@ -137,10 +137,9 @@ app.configure(function() {
             });
         }
     });
-
 });
 
-app.use("/workers", require("./worker_api.js"));
+app.use("/workers", require("./worker_api"));
 
 /* Redirect to correct URL on every request */
 app.get(/.*/, function (req, resp, next) {
@@ -232,7 +231,7 @@ app.get('/problem/:id', function(req, resp) {
             problem.is_queued = function() { return problem.status === 'queued'; };
             problem.results = '';
 
-            db.view('datum/output', {  }, function (err, rowSet) {
+            db.view('datum/output', { startkey: problem.id, endkey: problem.id+"\ufff0" }, function (err, rowSet) {
                 for (var i in rowSet) {
                     var row = rowSet[i].value;
                     var resultNum = (parseInt(i, 10)+1);
