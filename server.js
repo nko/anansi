@@ -154,7 +154,12 @@ app.get(/.*/, function (req, resp, next) {
 });
 
 app.get('/compute', function(req, res) {
-	res.render('embedded_compute.html');
+	res.render('embedded_compute.html', {layout: false});
+	/*fs.readFile(process.cwd() + '/views/embedded_compute.html', function(err, data) {
+		sys.puts(data);
+		res.contentType('text/html');
+		res.send(data);
+	}); */
 });
 
 /* Homepage */

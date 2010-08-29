@@ -14,7 +14,6 @@ var runner = {
     cu_per_s: 0, // computing units per second
     interval_break: 100, //ms
     
-
     /**
      * here is an arbitrary definition:
      * the time it takes to 
