@@ -2,7 +2,8 @@ var express = require('express'),
     sys = require('sys'),
     fs = require('fs'),
 	listenPort = 3000,
-	app = express.createServer();
+	app = express.createServer(),
+    _ = require('./lib/underscore')._;
 
 var cradle = require('cradle'),
     c = new(cradle.Connection)('maprejuice.couchone.com'),
@@ -66,15 +67,41 @@ var Problem = function(opts) {
     this.created_at = opts.created_at || (new Date().getTime());
     this.map_function = opts.map_function;
     this.reduce_function = opts.reduce_function;
-    this.data = opts.data || {};
+    if (opts.data) {
+        if (typeof opts.data === 'string') {
+            this.data = JSON.parse(opts.data)
+        } else { // already JSON
+            this.data = opts.data;
+        }
+    } else {
+        this.data = {};
+    }
     this.type = 'problem';
+    this.errors = [];
+};
+Problem.prototype.validate = function() {
+    if (!this.name || this.name.trim() == '') {
+        this.errors.push({field: 'name', message: "Problem Name can't be blank"})
+    }
+    if (!this.map_function || this.map_function.trim() == '') {
+        this.errors.push({field: 'map_function', message: "Map Function can't be blank"})
+    }
+    if (!this.reduce_function || this.reduce_function.trim() == '') {
+        this.errors.push({field: 'reduce_function', message: "Reduce Function can't be blank"})
+    }
+    return !this.has_errors();
+};
+Problem.prototype.has_errors = function() {
+    return this.errors.length != 0;
+};
+Problem.prototype.has_error = function(field_name) {
+    return _.any(this.errors, function (item) { return item.field == field_name; }, field_name);
 };
 
 /* Redirect to correct URL on every request */
 app.get(/.*/, function (req, resp, next) {
     var host = req.header('host');
     var path = req.url;
-    sys.puts('host => '+host+", path => "+path);
     if (host == 'www.maprejuice.com' || host == 'anansi.no.de') {
         resp.redirect("http://maprejuice.com"+path, 301);
     } else {
@@ -102,7 +129,11 @@ app.get('/', function(req, res) {
 /* Form to create problem */
 app.get('/problem', function(req, res) {
     // TODO create object here
-    res.render('problem/new');
+    res.render('problem/new', {
+        locals: {
+            problem: new Problem({})
+        }
+    });
 });
 
 /* Get a specific problem */
@@ -119,12 +150,21 @@ app.get('/problem/:id', function(req, resp) {
 });
 
 /* This is where the problem is actually created */
-app.post('/problem', function(req, res) {
+app.post('/problem', function(req, resp) {
     // TODO sanitize the shit out of this. Make sure it's valid js etc
-    var p = new Problem(req.body); // hack for now, we'll sanitize and split up data later
-    db.insert(p, function (err, result) {
-        res.redirect('/problem/' + result.id);
-    });
+    var p = new Problem(req.body);
+
+    if (p.validate()) {
+        db.insert(p, function (err, result) {
+            resp.redirect('/problem/' + result.id);
+        });
+     } else {
+        resp.render('problem/new', {
+            locals: {
+                problem: p
+            }
+        });
+    }
 });
 
 

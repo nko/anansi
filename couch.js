@@ -6,6 +6,8 @@ sys.puts('Got c => ' + sys.inspect(c));
 sys.puts('Databases => '+c.databases());
 var db = c.database('maprejuice');
 sys.puts('Got db: '+db.name);
+
+/*
 db.exists(function (err, res) {
     sys.puts('db.exists => err = '+sys.inspect(err));
     sys.puts('db.exists => res = '+sys.inspect(res));
@@ -22,18 +24,13 @@ db.exists(function (err, res) {
 //    sys.p(doc);
 //});
 
-///*
+/*
 db.get('db8b3af81b102c450a8440fe870006c8', function (err, doc) {
     sys.puts("db.get => err = "+err);
     sys.puts("db.get => doc = "+doc);
 });
 sys.puts('Got p');
 
-db.view('problems/all', function (err, res) {
-    res.forEach(function (row) {
-        sys.puts(row.name + " is a problem");
-    });
-});
 /*
 db.insert({
     name: 'First Problem',
@@ -51,8 +48,19 @@ db.insert({
 sys.puts('Set p');
 //*/
 
-db.get('problem1', function (err, doc) {
-    sys.puts('db.get(problem1) => doc = '+doc);
+db.insert('_design/problems', {
+    find_nulls: {
+        map: function (doc) {
+            if (!doc.name) { emit(null, doc); }
+        }
+    }
 });
+
+db.get('problems/find_nulls', function (err, rowSet) {
+    for (var i in rowSet) {
+        sys.puts(sys.inspect(rowSet[i]));
+    }
+});
+
 sys.puts('Got p');
 //*/

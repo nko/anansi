@@ -19,6 +19,31 @@ html {
 
 body {
 }
+h2 {
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 20px;
+  margin-bottom: 20px;
+}
+  h2 span {
+    background: #777;
+    color: #eee;
+    font-size: 14px;
+    font-weight: normal;
+    margin-left: 30px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+  }
+dl {}
+  dt {
+    font-weight: bold;
+    padding: 0 0 5px;
+  }
+  dd {
+    padding-bottom: 10px;
+  }
 
 #container {
 	margin: 20px auto 20px;
@@ -79,14 +104,49 @@ h1 a:hover { opacity: .9; }
 	text-decoration: underline;
 	color: #fff;
 }
+.message {
+  background: #eee;
+  border: 1px solid blue;
+  font-weight: bold;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+  .message ul {}
+    .message ul li {
+      padding: 5px 0;
+    }
+  .message.errors {
+    background: pink;
+    border: 1px solid red;
+  }
+
+
+dl {}
+  dt {
+  }
+  dd.js {
+    border: 1px dotted #555;
+    margin: 0 10px 20px 50px;
+    padding: 10px;
+  }
 
 /** =FORM                                                         */
 form { }
   form .form-field {
     clear: both;
-    padding: 5px 0 20px;
+    margin-bottom: 10px;
+    padding: 0 0 20px;
     position: relative;
+    border-top-left-radius: 24px;
+    -moz-border-radius-topLeft: 24px;
+    -webkit-border-top-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+    -moz-border-radius-bottomRight: 24px;
+    -webkit-border-bottom-right-radius: 24px;
   }
+    form .form-field.error {
+      background: pink;
+    }
   form .form-field .step {
     background: #999;
     color: #eee;
@@ -117,6 +177,7 @@ form { }
   }
   form .form-field label {
     display: block;
+    padding-top: 8px;
   }
     form .form-field label span {
       float: right;

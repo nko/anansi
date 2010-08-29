@@ -1,26 +1,33 @@
+- if (problem && problem.has_errors())
+  .message.errors
+    ul
+      - for (var i in problem.errors)
+        - error = problem.errors[i]
+        li #{error.message}
+
 form(action="/problem", method="post")
-  .form-field
+  .form-field(class=(problem && problem.has_error('name') ? "error" : ""))
     .step 1
     label(for="problem_name") Problem Name
     input(type="text", name="name", id="problem_name")
     .instructions This is just for your reference later
 
-  .form-field
+  .form-field(class=(problem && problem.has_error('map_function') ? " error" : ""))
     .step 2
-    label(for="problem_map_algorithm") Map Algorithm
+    label(for="problem_map_algorithm") Map Function
     textarea(cols="3", type="text", name="map_function", id="problem_algorithm_map_function")
     .instructions Should look like function map(key, value) { ... }
 
-  .form-field
+  .form-field(class=(problem && problem.has_error('reduce_function') ? " error" : ""))
     .step 3
-    label(for="problem_reduce_algorithm") Reduce Algorithm
+    label(for="problem_reduce_algorithm") Reduce Function
     textarea(cols="3", type="text", name="reduce_function", id="problem_algorithm_reduce_function")
     .instructions Should look like function reduce(key, values) { ... }
 
-  .form-field
+  .form-field(class=(problem && problem.has_error('data') ? " error" : ""))
     .step 4
     label(for="problem_inputs") Inputs
-    textarea(cols="3", type="text", name="data", id="problem_inputs", disabled="disabled")
+    textarea(cols="3", type="text", name="data", id="problem_inputs")
     .instructions JSON object of keys and values. We'll use this as the initial values for the map function.
     
   .form-field.submit 
