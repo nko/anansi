@@ -181,14 +181,26 @@ app.get('/', function(req, res) {
 });
 
 /* This is a stub, please expand it. */
-app.get('/recently_solved', function(req, res) {
-	res.send(JSON.stringify([
-		{name: "Jonas Algorithm", percentage: "88", url: "/"},
-		{name: "Brandon Account", percentage: "18", url: "/"},
-		{name: "Ryan Theories", percentage: "95", url: "/"},
-		{name: "Tons of Sharks", percentage: "38", url: "/"},
-		{name: "Traveling Salesman", percentage: "0", url: "/"}
-	]));
+app.get('/recently_solved', function(req, resp) {
+    db.view('problems/complete', {limit: 5}, function (err, rowSet) {
+        sys.puts(sys.inspect(rowSet));
+        if (err) {
+            resp.send(JSON.stringify([]));
+        } else {
+            var results = [];
+            for (var i in rowSet) {
+                results.push({name: rowSet[i].value.name, percentage: "100%", url: "/problem/"+rowSet[i].id});
+            }
+            resp.send(JSON.stringify(results));
+        }
+    });
+//	res.send(JSON.stringify([
+//		{name: "Jonas Algorithm", percentage: "88", url: "/"},
+//		{name: "Brandon Account", percentage: "18", url: "/"},
+//		{name: "Ryan Theories", percentage: "95", url: "/"},
+//		{name: "Tons of Sharks", percentage: "38", url: "/"},
+//		{name: "Traveling Salesman", percentage: "0", url: "/"}
+//	]));
 });
 
 app.get('/about', function(req, res) {
