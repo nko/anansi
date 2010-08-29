@@ -218,13 +218,14 @@ app.get('/problem/:id', function(req, resp) {
         console.log(sys.inspect(problem));
 		problem.initial_data = JSON.stringify(problem.data);
 		problem.is_queued = function() { return problem.status === 'queued'; };
-        problem.results = [];
+        problem.results = '';
 
         db.view('datum/output', {  }, function (err, rowSet) {
             for (var i in rowSet) {
-                problem.results.push(rowSet[i]);
+                var row = rowSet[i].value;
+                var resultNum = (parseInt(i, 10)+1);
+                problem.results += resultNum + '. ' + row.key + ' = ' + row.values + '\n';
             }
-            problem.results_as_string = JSON.stringify(problem.results);
 		    resp.render('problem/show.html', {
 			    problem: problem
             });
