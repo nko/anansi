@@ -52,7 +52,7 @@ module.exports = (function() {
                 }
                 
                 res.send({
-                    id: job.id,
+                    id: job._id,
                     problem_id: job.problem_id,
                     input: job.input,
                     algorithm: job.algorithm,
