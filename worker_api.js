@@ -9,6 +9,8 @@
 
 var express = require("express"),
     sys = require("sys"),
+    Problem = require('./models/problem').Problem,
+    Job = require('./models/job').Job,
     dataa = require("./models/data_abstraction");
 
 module.exports = (function() {
@@ -35,7 +37,6 @@ module.exports = (function() {
                 res.send(err.message + "\n" + err.stack, 500);
             } else {
                 res.send(job);
-
                 // TODO save job start time and perhaps who pulled it
                 // TODO mark job as running
             }

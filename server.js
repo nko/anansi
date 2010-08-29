@@ -4,7 +4,8 @@ var express = require('express'),
 	listenPort = 3000,
 	app = express.createServer(),
     _ = require('./lib/underscore')._,
-    Problem = require('./models/problem').Problem;
+    Problem = require('./models/problem').Problem,
+    Job = require('./models/job').Job;
 
 var cradle = require('cradle'),
     c = new(cradle.Connection)('maprejuice.couchone.com'),
@@ -52,6 +53,24 @@ app.configure(function() {
             map: function (doc) {
                 if (doc.name && doc.type == 'problem' && doc.status && doc.status == 'complete') {
                     emit(null, doc);
+                }
+            }
+        }
+    });
+
+    // set up problem views
+    db.insert('_design/jobs', {
+        all: {
+            map: function (doc) {
+                if (doc.type && doc.type === 'job') {
+                    emit(null, doc);
+                }
+            }
+        },
+        queued: {
+            map: function (doc) {
+                if (doc.type && doc.type === "job" && doc.status && doc.status === "queued") {
+                    emit(doc.created_at, doc);
                 }
             }
         }
@@ -112,6 +131,36 @@ app.get('/problem/:id', function(req, resp) {
     });
 });
 
+/* Kick off the specified problem by queing up all the jobs for it */
+app.get('/problem/:id/start', function(req, resp) {
+    // get object
+    db.get(req.params.id, function (err, result) {
+        var p = new Problem(result);
+        // only start the job if it isn't already running
+        if (!(p.status === 'running')) {
+            p.status = 'running';
+            var input_data = p.data;
+            for (var key in input_data) {
+                var inp = {};
+                inp[key] = input_data[key];
+                var job = new Job({
+                    problem_id: p.id,
+                    input: inp,
+                    algorithm: p.map_function,
+                    algorithm_type: 'map'
+                });
+                sys.puts(sys.inspect(job));
+                if (job.validate()) {
+                    db.insert(job, function (err, result) {
+                        sys.puts(sys.inspect(err));
+                    });
+                }
+            }
+        }
+        resp.redirect('/problem/'+req.params.id);
+    });
+});
+
 /* This is where the problem is actually created */
 app.post('/problem', function(req, resp) {
     // TODO sanitize the shit out of this. Make sure it's valid js etc
@@ -129,6 +178,42 @@ app.post('/problem', function(req, resp) {
         });
     }
 });
+
+
+/* Homepage */
+app.get('/jobs', function(req, res) {
+    db.view('jobs/all',
+            function (err, rowSet) {
+                var jobsList = [];
+                for (var row in rowSet) {
+                    var job = new Job(rowSet[row].value);
+                    jobsList.push(job);
+                }
+                res.render('job/list', {
+                    layout: false,
+                    locals: {
+                        jobs: jobsList
+                    }
+                });
+            });
+});
+app.get('/jobs/queued', function(req, res) {
+    db.view('jobs/queued',
+            function (err, rowSet) {
+                var jobsList = [];
+                for (var row in rowSet) {
+                    var job = new Job(rowSet[row].value);
+                    jobsList.push(job);
+                }
+                res.render('job/list', {
+                    layout: false,
+                    locals: {
+                        jobs: jobsList
+                    }
+                });
+            });
+});
+
 
 
 // Listen on 80? Really?
