@@ -20,17 +20,20 @@ exports.Problem = function(opts) {
     }
     this.reduce_function = opts.reduce_function;
 
+	this.data = "";
     if (opts.data) {
         if (typeof opts.data === 'string') {
             opts.data = opts.data.replace(/\n/g, "\n"); // hackety hack
             opts.data = opts.data.replace(/\r/g, "\r"); // hackety hack
             opts.data = opts.data.replace(/\t/g, "\r"); // hackety hack
-            this.data = JSON.parse(opts.data)
-        } else { // already JSON
+            try {
+				this.data = JSON.parse(opts.data)
+			} catch(e) {
+				this.data = opts.data;
+			}
+		} else { // already JSON
             this.data = opts.data;
         }
-    } else {
-        this.data = {};
     }
     this.type = 'problem';
     this.errors = [];
