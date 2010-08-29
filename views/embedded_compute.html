@@ -3,46 +3,43 @@
 <head> 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
     <title>Anansi - Buying Time</title>
-    <script type="text/javascript" src="worker.js"></script>
+    <!-- script type="text/javascript" src="worker.js"></script -->
 </head>
 <body>
-invisible iframe
 <script type="text/javascript">
-var anansi = {
-    /*    Token symbolizing that this person/page getting a problemset is who we think they should be. */
-    token: (function(s) {
-        var r = s.split('=');
-        for(var i = 0; i < r.length; i = i + 2) {
-            if(r[i] === 'token') return r[i + 1];
-        }
-    })(window.location.search.substring(1)),
+if(!!window.Worker) {
+	var anansi = {
+		/*    Token symbolizing that this person/page getting a problemset is who we think they should be. */
+		token: (function(s) {
+			var r = s.split('=');
+			for(var i = 0; i < r.length; i = i + 2) {
+				if(r[i] === 'token') return r[i + 1];
+			}
+			return "";
+		})(window.location.search.substring(1)),
 
-    /*    Wrapper method, fairly self explanatory. */
-    log: function(msg) {
-        if(typeof console !== 'undefined' && typeof console.log === 'function') console.log(msg);
-        else alert(msg);
-    }
-};
+		/*    Wrapper method, fairly self explanatory. */
+		log: function(msg) {
+			if(typeof console !== 'undefined' && typeof console.log === 'function') console.log(msg);
+			else alert(msg);
+		}
+	};
 
-(function() {
-    anansi.worker = new Worker('anansi.js');
-    anansi.worker.addEventListener('message', function(m) {
-        // Don't remove, debugging will hurt you.
-        if(typeof console !== "undefined" && typeof console.log === "function") console.log(m.data, m);
-    }, false);
+	(function() {
+		anansi.worker = new Worker('/js/anansi.js');
+		anansi.worker.addEventListener('message', function(m) {
+			// Don't remove, debugging will hurt you.
+			if(typeof console !== "undefined" && typeof console.log === "function") console.log(m.data, m);
+		}, false);
     
-    // tell worker to initialize
-    // this gives us an avenue to addfurther commands such as
-    // stop, pause, slower, yo name it
-    anansi.worker.postMessage({
-        command: "init",
-        key: anansi.token
-    });
+		// tell worker to initialize
+		// this gives us an avenue to addfurther commands such as
+		// stop, pause, slower, yo name it
+		anansi.worker.postMessage("init");
     
-    anansi.worker.postMessage({
-        command: "start"
-    });        
-})();
+		anansi.worker.postMessage("start");
+	})();
+}
 </script>
 
 </body>
