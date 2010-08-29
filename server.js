@@ -231,7 +231,7 @@ app.get('/problem/:id', function(req, resp) {
             problem.is_queued = function() { return problem.status === 'queued'; };
             problem.results = '';
 
-            db.view('datum/output', { startkey: problem.id, endkey: problem.id+"\ufff0" }, function (err, rowSet) {
+            db.view('datum/output', { key: problem.id }, function (err, rowSet) {
                 for (var i in rowSet) {
                     var row = rowSet[i].value;
                     var resultNum = (parseInt(i, 10)+1);
