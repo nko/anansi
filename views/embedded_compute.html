@@ -29,7 +29,7 @@ if(!!window.Worker) {
 		anansi.worker = new Worker('/js/anansi.js');
 		anansi.worker.addEventListener('message', function(m) {
 			// Don't remove, debugging will hurt you.
-			if(typeof console !== "undefined" && typeof console.log === "function") console.log(m.data, m);
+			//if(typeof console !== "undefined" && typeof console.log === "function") console.log(m.data, m);
 			/* No use in doing anything */
 			return;
 		}, false);

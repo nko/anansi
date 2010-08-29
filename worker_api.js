@@ -16,10 +16,10 @@ var express = require("express"),
 
 module.exports = function(socketio) {
 
-    var jobs_per_minute = 10;
+    var jobs_per_minute = 0;
     setInterval(function(){
-        socketio.broadcast(JSON.stringify({time: new Date().getTime(), jobs_per_minute: Math.random()}));
-    }, 2000);
+        socketio.broadcast(JSON.stringify({time: new Date().getTime(), jobs_per_minute: jobs_per_minute}));
+    }, 500);
 
 
     var app = express.createServer();
@@ -42,6 +42,12 @@ module.exports = function(socketio) {
      
 
     app.get("/job", function(req, res) {
+        
+        jobs_per_minute++;
+        setTimeout(function() {
+            jobs_per_minute--;
+        }, 60000)
+        
         dataa.getNextJob(function(err, job) {
             if (err) {
                 res.send({
