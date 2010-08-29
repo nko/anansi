@@ -79,7 +79,6 @@ module.exports = (function() {
 
         dataa.findJob(req.params.jobId, function (err, job) {
             if (job) {
-                res.send("ok");
                 
                 var results = req.body;
                 // create a datum for each k,v pair
@@ -144,9 +143,11 @@ module.exports = (function() {
                                                     }
                                                 }
                                             }
+                                            res.send("ok");
                                             return;
                                         });
                                     } else {
+                                        res.send("ok");
                                         return;
                                     }
                                 });
