@@ -212,7 +212,16 @@ app.post('/problem', function(req, resp) {
             resp.redirect('/problem/' + result.id);
         });
      } else {
-        resp.render('problem/new.html', {
+		p.stringed_data = "";
+		
+		try {
+			var attemptedStringify = JSON.stringify(p.data).split('');
+			attemptedStringify[0] = '';
+			attemptedStringify[attemptedStringify.length - 1] = '';
+			p.stringed_data = attemptedStringify.join('');
+		} catch(e) {}
+        
+		resp.render('problem/new.html', {
             problem: p
         });
     }
