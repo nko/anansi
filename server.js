@@ -7,10 +7,14 @@ var express = require('express'),
     mustache = require('mustache'),
 	Problem = require('./models/problem').Problem,
     Job = require('./models/job').Job;
+    backgroundTasks = require('./background_tasks').backgroundTasks,
+    dataa = require("./models/data_abstraction");
 
 var cradle = require('cradle'),
     c = new(cradle.Connection)('maprejuice.couchone.com'),
     db = c.database('maprejuice');
+
+var TEN_MINS_IN_MS = (1000 * 60 * 10);
     
 app.configure(function() {
     app.use(express.logger({
@@ -47,21 +51,21 @@ app.configure(function() {
         },
         queued: {
             map: function (doc) {
-                if (doc.name && doc.type == 'problem' && doc.status && doc.status == 'queued') {
+                if (doc.type && doc.type == 'problem' && doc.status && doc.status == 'queued') {
                     emit(null, doc);
                 }
             }
         },
         running: {
             map: function (doc) {
-                if (doc.name && doc.type == 'problem' && doc.status && doc.status == 'running') {
+                if (doc.type && doc.type == 'problem' && doc.status && doc.status == 'running') {
                     emit(null, doc);
                 }
             }
         },
         complete: {
             map: function (doc) {
-                if (doc.name && doc.type == 'problem' && doc.status && doc.status == 'complete') {
+                if (doc.type && doc.type == 'problem' && doc.status && doc.status == 'complete') {
                     emit(null, doc);
                 }
             }
@@ -73,7 +77,17 @@ app.configure(function() {
         all: {
             map: function (doc) {
                 if (doc.type && doc.type === 'job') {
-                    emit(null, doc);
+                    emit(doc.created_at, doc);
+                }
+            }
+        },
+        unfinished: {
+            map: function (doc) {
+                if (doc.type && doc.type === "job"
+                        && doc.status && (doc.status === "queued" || doc.status === "processing")
+                        && !doc.datumId) {
+                    // set problem id as key so we can query by this later
+                    emit(doc.problem_id, doc);
                 }
             }
         },
@@ -82,6 +96,44 @@ app.configure(function() {
                 if (doc.type && doc.type === "job" && doc.status && doc.status === "queued") {
                     emit(doc.created_at, doc);
                 }
+            }
+        },
+        stale: {
+            map: function (doc) {
+                if (doc.type && doc.type == 'job'
+                        && doc.status && doc.status == 'processing'
+                        && doc.created_at && doc.created_at < (new Date().getTime() - TEN_MINS_IN_MS)) {
+                    emit(doc.created_at, doc);
+                }
+            }
+        }
+    });
+
+    // set up problem views
+    db.insert('_design/datum', {
+        all: {
+            map: function (doc) {
+                if (doc.type && doc.type === 'datum') {
+                    emit(null, doc);
+                }
+            }
+        },
+        intermediate: {
+            map: function (doc) {
+                if (doc.type && doc.type === 'datum'
+                        && doc.dataType && doc.dataType == 'intermediate') {
+                    emit(doc.problemId, doc);
+                }
+
+            }
+        },
+        output: {
+            map: function (doc) {
+                if (doc.type && doc.type === 'datum'
+                        && doc.dataType && doc.dataType == 'output') {
+                    emit(doc.problemId, doc);
+                }
+
             }
         }
     });
@@ -148,11 +200,10 @@ app.get('/problem', function(req, res) {
 /* Get a specific problem */
 app.get('/problem/:id', function(req, resp) {
     // get object
-    db.get(req.params.id, function (err, result) {
-        var p = new Problem(result);
+    dataa.findProblem(req.params.id, function (err, problem) {
         resp.render('problem/show', {
             locals: {
-                problem: p
+                problem: problem
             }
         });
     });
