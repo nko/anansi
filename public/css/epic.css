@@ -11,7 +11,7 @@ blockquote, q { quotes: "" ""; }
 
 html {
 	text-align: center;
-	background: #f9f9f9 url('../images/epic_bg.jpg') repeat-x top left;
+	background: #f9f9f9 url('../images/epic_bg.jpg');
 	font: normal 62.5%/1 helvetica, arial, sans-serif;
 	color: #333;
 	padding: 0;
@@ -54,7 +54,7 @@ a:hover { color: #1062be; text-decoration: underline; }
 	width: 524px;
 	padding: 10px;
 	border: 1px solid #c9c8c8;
-	background-color: rgba(237, 237, 237, .4);
+	background-color: rgba(242, 242, 242, .8);
 	-webkit-border-radius: 6px;
 	-moz-border-radius: 6px;
 	border-radius: 6px;
@@ -156,4 +156,15 @@ a:hover { color: #1062be; text-decoration: underline; }
 	width: 200px;
 	float: right;
 	padding: 10px;
+}
+
+/* Error classes */
+#message_errors { margin-bottom: 20px; }
+
+#message_errors li {
+	padding: 7px;
+	background-color: #d28c41;
+	border-left: 5px solid #b97021;
+	color: #333;
+	font-size: 1.2em;
 }

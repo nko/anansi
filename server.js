@@ -189,22 +189,39 @@ app.get('/contact', function(req, res) {
 
 /* Form to create problem */
 app.get('/problem', function(req, res) {
-    // TODO create object here
-    res.render('problem/new', {
-        locals: {
-            problem: new Problem({})
-        }
+	// TODO create object here
+    res.render('problem/new.html', {
+        problem: new Problem({})
     });
+});
+
+/* This is where the problem is actually created */
+app.post('/problem', function(req, resp) {
+    // TODO sanitize the shit out of this. Make sure it's valid js etc
+    var p = new Problem(req.body);
+
+    if (p.validate()) {
+        db.insert(p, function (err, result) {
+            resp.redirect('/problem/' + result.id);
+        });
+     } else {
+        sys.puts(p.errors);
+		resp.render('problem/new.html', {
+			problem: p
+        });
+    }
 });
 
 /* Get a specific problem */
 app.get('/problem/:id', function(req, resp) {
     // get object
     dataa.findProblem(req.params.id, function (err, problem) {
-        resp.render('problem/show', {
-            locals: {
-                problem: problem
-            }
+        
+		problem.initial_data = JSON.stringify(problem.data);
+		problem.is_queued = function() { return problem.status === 'queued'; };
+		
+		resp.render('problem/show.html', {
+			problem: problem
         });
     });
 });
@@ -243,25 +260,6 @@ app.get('/problem/:id/start', function(req, resp) {
         }
     });
 });
-
-/* This is where the problem is actually created */
-app.post('/problem', function(req, resp) {
-    // TODO sanitize the shit out of this. Make sure it's valid js etc
-    var p = new Problem(req.body);
-
-    if (p.validate()) {
-        db.insert(p, function (err, result) {
-            resp.redirect('/problem/' + result.id);
-        });
-     } else {
-        resp.render('problem/new', {
-            locals: {
-                problem: p
-            }
-        });
-    }
-});
-
 
 /* Homepage */
 app.get('/jobs', function(req, res) {

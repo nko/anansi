@@ -1,0 +1,37 @@
+<style type="text/css">
+#get_started_box { display: none; }
+</style>
+
+{{#problem}}	
+	{{#is_queued}}
+		<p class="generic_alert">
+			Your problem is queued up to run.<br>
+		
+			<a href="/problem/{{id}}/start" title="Start this Problem">Start this Problem</a>
+		</p>
+	{{/is_queued}}
+	
+	<h2>Problem: {{name}}</h2>
+	<p class="problem_status">{{status}}</p>
+
+	<h2>Map Function</h2>
+	<p class="problem_fn">{{map_function}}</p>
+
+	<h2>Reduce Function</h2>
+	<p class="problem_fn">{{reduce_function}}</p>
+
+	<h2>Initial Data</h2>
+	<p class="problem_fn">{{initial_data}}</p>
+
+	<h2>Results</h2>
+	<p class="problem_fn">
+		{{#is_queued}}
+			Your problem is queued up to run.<br>	
+			<a href="/problem/{{id}}/start" title="Start this Problem">Start this Problem</a>
+		{{/is_queued}}
+
+		{{^is_queued}}
+			{{results}}
+		{{/is_queued}}
+	</p>
+{{/problem}}

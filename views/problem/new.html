@@ -1,0 +1,68 @@
+<h2>Start a new MapRejuice Problem</h2>
+<p>
+	Creating a MapRejuice Problem set is fairly simple. Fill out the fields below (<em>they're all required</em>), and we'll file it in
+	our system to be computed by millions of machines across the world.
+</p>
+
+{{#problem}}
+	<ul id="message_errors">
+	{{#errors}}
+		<li>{{message}}</li>
+	{{/errors}}
+	</ul>
+
+<style type="text/css">
+#pcreate label {
+	display: block;
+	font-weight: bold;
+}
+
+#problem_name, #pcreate textarea {
+	width: 500px;
+	padding: 4px;
+	font-size: 12px;
+	border: 1px solid #c9c9c9;
+}
+
+#pcreate textarea {
+	min-height: 100px;
+	font-family: "Inconsolata", "Monaco", "Courier New", "Bitstream Vera Sans Mono", monospace;
+	font-size: 11px;
+	line-height: 13px;
+}
+
+#get_started_box { display: none; }
+</style>
+
+<form id="pcreate" method="post" action="/problem">
+	<p>
+		<label for="problem_name">Problem Name</label>
+		<input type="text" name="name" id="problem_name" value="{{name}}">
+	</p>
+
+	<p>
+		<label for="map_function">Map Function</label>
+		<textarea name="map_function" id="problem_algorithm_map_function">{{map_function}}</textarea>
+	</p>
+
+	<p>
+		<label for="problem_name">Reduce Function</label>
+		<textarea name="reduce_function" id="problem_algorithm_reduce_function">{{reduce_function}}</textarea>
+	</p>
+
+	<p>
+		<label for="problem_name">Initial Data</label>
+		<textarea name="data" id="problem_inputs">{{data}}</textarea>
+	</p>
+
+	<p style="font-size: 11px; text-align: center;">
+		<em>
+			By clicking "create" below, you agree that the above entered information does not, to the best of your knowledge,
+			cause any harm to anyone anywhere in any form, and is being computed purely for the sake of scientific discovery.
+		</em>
+	</p>
+
+	<input type="image" value="Save this Problem" src="/images/create_btn.png" style="margin-left: 150px; margin-top: 20px; margin-bottom: 50px;">
+</form>
+
+{{/problem}}
