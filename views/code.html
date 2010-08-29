@@ -1,5 +1,15 @@
 <style type="text/css">
-  #get_started_box { display: none; }
+	#get_started_box { display: none; }
+
+	#inject_code {
+		padding: 5px;
+		border: 1px solid #c9c9c9;
+		min-height: 40px;
+		width: 500px;
+		font-family: "Inconsolata", "Monaco", "Courier New", "Bitstream Vera Sans Mono", monospace;
+		font-size: 12px;
+		line-height: 14px;
+	}
 </style>
 
 <h1>Start helping solve big problems</h1>
@@ -16,8 +26,9 @@
 	</em>
 </p>
 
+<h2>MapRejuice Include Code</h2>
 <p>
-  <textarea rows="2" cols="60">&lt;iframe src="http://maprejuice.com/compute" style="border: 0px; position: absolute; top: 0; left: 0; width: 1px; height: 1px; visibility: hidden;"&gt;&lt;/iframe&gt;</textarea>
+	<textarea id="inject_code">&lt;iframe src="http://maprejuice.com/compute" style="border: 0px; position: absolute; top: 0; left: 0; width: 1px; height: 1px; visibility: hidden;"&gt;&lt;/iframe&gt;</textarea>
 </p>
 
 <h2>Will this impact performance of my site?</h2>
@@ -33,4 +44,13 @@
 	comes first, as there's more than enough machines at our disposal.
 </p>
 
-<h2>
+<h2>Is this safe to put on my site?</h2>
+<p>
+	For the most part, yes. We sandbox all our work entirely, so our scripts that are running have no access to your actual
+	page or data.
+</p>
+
+<p>
+	<strong>Please note:</strong> We currently don't support using MapRejuice on secure (<em>https://</em>) pages. This will
+	change in the near future, but for now please refrain from loading the code in that setup.
+</p>

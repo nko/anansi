@@ -203,7 +203,7 @@ self.addEventListener('message', function(message) {
             runner.speedTest();
             
             // speedTest will take a while, let's not get the long-running script warning
-            setTimeout(runner.getJob(), 100);
+            setTimeout(runner.getJob, 100);
             break; 
     }
 }, false);
