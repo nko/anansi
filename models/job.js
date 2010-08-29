@@ -13,6 +13,7 @@
 
 exports.Job = function(opts) {
     this.id = opts.id || opts['_id'];
+    this.rev = opts.rev || opts['_rev'];
     this.problem_id = opts.problem_id;
     this.created_at = opts.created_at || (new Date().getTime());
     this.status = opts.status || 'queued';

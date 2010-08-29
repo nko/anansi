@@ -1,5 +1,6 @@
 exports.Problem = function(opts) {
     this.id = opts.id || opts['_id'];
+    this.rev = opts.rev || opts['_rev'];
     this.name = opts.name;
     this.status = opts.status || 'queued';
     this.created_at = opts.created_at || (new Date().getTime());
