@@ -37,7 +37,7 @@ var runner = {
             return j;
         };
                 
-        var threshold = 4000, // ms
+        var threshold = 300, // ms
             num = 2, 
 			repeat = 1000000;
             
@@ -94,9 +94,8 @@ var runner = {
         self.postMessage("Received job:");
         self.postMessage(job);
         // download the algorithm
-        var algo_str = runner.req("/workers/"+job.type+"/"+job.problem_id, "GET");
-        self.postMessage("Received "+ job.type + " algo: "+algo_str);
-        runner.algorithm = eval(algo_str); // gives u goosebumps
+        self.postMessage("Received "+ job.type + " algo: "+job.algorithm);
+        runner.algorithm = eval("("+job.algorithm+")"); // gives u goosebumps
         runner.runtime_data = {
             done: false,
             iteration: 0,
@@ -106,8 +105,7 @@ var runner = {
         runner.runJob();
         
     },
-    
-    
+
     /**
      * Runs the job by applying the current algorithm repetitively on a runtime_data object
      * until the done property of that object is true.

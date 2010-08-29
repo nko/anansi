@@ -198,16 +198,15 @@ app.get('/problem', function(req, res) {
 /* This is where the problem is actually created */
 app.post('/problem', function(req, resp) {
     // TODO sanitize the shit out of this. Make sure it's valid js etc
+    console.log(sys.inspect(req.body));
     var p = new Problem(req.body);
-
     if (p.validate()) {
         db.insert(p, function (err, result) {
             resp.redirect('/problem/' + result.id);
         });
      } else {
-        sys.puts(p.errors);
-		resp.render('problem/new.html', {
-			problem: p
+        resp.render('problem/new.html', {
+            problem: p
         });
     }
 });
@@ -216,7 +215,7 @@ app.post('/problem', function(req, resp) {
 app.get('/problem/:id', function(req, resp) {
     // get object
     dataa.findProblem(req.params.id, function (err, problem) {
-        
+        console.log(sys.inspect(problem));
 		problem.initial_data = JSON.stringify(problem.data);
 		problem.is_queued = function() { return problem.status === 'queued'; };
 		
@@ -225,6 +224,7 @@ app.get('/problem/:id', function(req, resp) {
         });
     });
 });
+
 
 /* Kick off the specified problem by queing up all the jobs for it */
 app.get('/problem/:id/start', function(req, resp) {
@@ -236,13 +236,15 @@ app.get('/problem/:id/start', function(req, resp) {
             var input_data = p.data;
             for (var key in input_data) {
                 var inp = {};
-                inp[key] = input_data[key];
+                inp.key = key;
+                inp.value = input_data[key];
                 var job = new Job({
                     problem_id: p.id,
                     input: inp,
                     algorithm: p.map_function,
                     algorithm_type: 'map'
                 });
+                console.log("starting job for problem " + p.id + " and key " + key);
                 sys.puts(sys.inspect(job));
                 if (job.validate()) {
                     db.insert(job, function (err, result) {
