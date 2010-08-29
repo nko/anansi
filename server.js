@@ -11,7 +11,7 @@ var express = require('express'),
     dataa = require("./models/data_abstraction");
 
 var cradle = require('cradle'),
-    c = new(cradle.Connection)('maprejuice.couchone.com', 5984, {cache: false, raw: false}),
+    c = new(cradle.Connection)('maprejuice.couchone.com', 5984, {cache: true, raw: false}),
     db = c.database('maprejuice');
 
 var TEN_MINS_IN_MS = (1000 * 60 * 10);
