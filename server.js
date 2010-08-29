@@ -257,7 +257,8 @@ app.get('/problem/:id/results', function(req, resp) {
                     var row = rowSet[i].value;
                     results[row.key] = row.values;
                 }
-                resp.send(results);
+				resp.contentType("text/html");
+                resp.send(JSON.stringify(results));
             });
         }
     });

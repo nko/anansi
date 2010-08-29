@@ -1,8 +1,20 @@
 <style type="text/css">
 #get_started_box, #users_get_started_box { display: none; }
+
+.dataset {
+	width: 500px;
+	padding: 4px;
+	font-size: 12px;
+	border: 1px solid #c9c9c9;
+	min-height: 100px;
+	font-family: "Inconsolata", "Monaco", "Courier New", "Bitstream Vera Sans Mono", monospace;
+	font-size: 11px;
+	line-height: 13px;
+}
 </style>
 
-{{#problem}}	
+{{#problem}}
+	<h2>Problem: {{name}}</h2>
 	{{#is_queued}}
 		<p class="generic_alert">
 			Your problem is queued up to run.<br>
@@ -10,18 +22,23 @@
 			<a href="/problem/{{id}}/start" title="Start this Problem">Start this Problem</a>
 		</p>
 	{{/is_queued}}
-	
-	<h2>Problem: {{name}}</h2>
-	<p class="problem_status">{{status}}</p>
 
+	{{^is_queued}}
+		<p style="background-color: #6ac176; color: #fff; border-left: 5px solid #3d984a; padding: 5px;">
+			Your job is currently {{status}}.
+		</p>
+	{{/is_queued}}
+	
 	<h2>Map Function</h2>
-	<p class="problem_fn"><pre>{{map_function}}</pre></p>
+	<p class="problem_fn">
+		<textarea class="dataset">{{map_function}}</textarea>
+	</p>
 
 	<h2>Reduce Function</h2>
-	<p class="problem_fn"><pre>{{reduce_function}}</pre></p>
+	<p class="problem_fn"><textarea class="dataset">{{reduce_function}}</textarea></p>
 
 	<h2>Initial Data</h2>
-	<p class="problem_fn"><pre>{{initial_data}}</pre></p>
+	<p class="problem_fn"><textarea class="dataset">{{initial_data}}</textarea></p>
 
 	<h2>Results</h2>
 	<p class="problem_fn">
@@ -31,7 +48,24 @@
 		{{/is_queued}}
 
 		{{^is_queued}}
-			<pre>{{results}}</pre>
+			<textarea id="results_data" class="dataset">Loading...</textarea>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$.ajax({
+		type: "GET",
+		url: "/problem/{{id}}/results",
+		data: "",
+	//	dataType: "json",
+		success: function(data) {
+			$("#results_data").val(data);
+		},
+		error: function(e) {
+			if(typeof console !== "undefined" && typeof console.log === "function") console.log(e);
+		}
+	});
+});
+</script>
 		{{/is_queued}}
 	</p>
 {{/problem}}
