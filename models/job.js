@@ -50,5 +50,8 @@ exports.Job.prototype = {
     },
     has_error: function(field_name) {
         return _.any(this.errors, function (item) { return item.field == field_name; }, field_name);
+    },
+    stringify_input: function() {
+        return JSON.stringify(this.input);
     }
 };
