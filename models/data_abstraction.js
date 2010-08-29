@@ -36,7 +36,8 @@ module.exports = (function() {
 
     that.saveJob = function(job, callback) {
         if (job.id) {
-            db.save(job, callback);
+            // hackety hack chop chop
+            db.save(job.id, job, callback);
         } else {
             db.insert(job, callback);
         }
@@ -51,7 +52,7 @@ module.exports = (function() {
 
     that.saveProblem = function(problem, callback) {
         if (problem.id) {
-            db.save(problem, callback);
+            db.save(problem.id, problem, callback);
         } else {
             db.insert(problem, callback);
         }
@@ -70,21 +71,21 @@ module.exports = (function() {
         db.get(id, function(err, result) {
             // save new datum if we can't find an existing one, or the current one is of type output
             if (err || (datum.dataType && datum.dataType === 'output')) {
-                db.insert(id, d, function (err, result) {
-                    callback(result);
+                db.insert(id, datum, function (err, result) {
+                    callback(null, result);
                 });
             } else {
                 // update existing datum
                 var existingDatum = new Datum(result);
                 // if existing is already an array, push new value on it
-                if ((existingDatum.values instanceof Array) && existingDatum.values.push) {
-                    existingDatum.values.push(datum.values);
+                if ((datum.values instanceof Array)) {
+                    existingDatum.values = existingDatum.values.concat(datum.values);
                 } else {
                     // create new array, consisting of old values, plus new one
-                    existingDatum.values = [existingDatum.values, datum.values];
+                    existingDatum.values.push(datum.values);
                 }
                 db.save(id, existingDatum, function (err, result) {
-                    callback(result);
+                    callback(null, result);
                 });
             }
         });
@@ -98,7 +99,7 @@ module.exports = (function() {
             if (!err) {
                 for (var i in rowSet) {
                     var job = new Job(rowSet[i].value);
-                    callback(job);
+                    callback(null, job);
                 }
             }
         });
@@ -197,11 +198,17 @@ module.exports = (function() {
     that.getNextJob = function(callback) {
         process.nextTick(function() {
             db.view('jobs/queued', function(err, rowSet) {
+                // enable this only if u want to delete shit
+                // for ( var i =0; i<rowSet.length; i++) {
+                //     db.remove(rowSet[i].value._id, rowSet[i].value._rev, function(){
+                //         console.log("deleted");
+                //         console.log(sys.inspect(arguments));
+                //     });
+                // }
                 if (err || !rowSet || rowSet.length == 0) {
                     callback(err, null);
                 } else {
-                    var nextJob = new Job(rowSet[0].value);
-                    callback(err, nextJob);
+                    callback(err, rowSet[0].value);
                 }
             });
         });
