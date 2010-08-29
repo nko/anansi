@@ -3,7 +3,7 @@ var sys = require('sys'),
     Job = require('./job').Job,
     Datum = require('./datum').Datum,
     cradle = require('cradle'),
-    c = new(cradle.Connection)('maprejuice.couchone.com', 5984, {cache: false, raw: false}),
+    c = new(cradle.Connection)('maprejuice.couchone.com', 5984, {cache: true, raw: false}),
     db = c.database('maprejuice');
 
 module.exports = (function() {
