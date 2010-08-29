@@ -215,21 +215,25 @@ app.post('/problem', function(req, resp) {
 app.get('/problem/:id', function(req, resp) {
     // get object
     dataa.findProblem(req.params.id, function (err, problem) {
-        console.log(sys.inspect(problem));
-		problem.initial_data = JSON.stringify(problem.data);
-		problem.is_queued = function() { return problem.status === 'queued'; };
-        problem.results = '';
+        if (err) {
+            resp.redirect('/');
+        } else {
+            console.log(sys.inspect(problem));
+            problem.initial_data = JSON.stringify(problem.data);
+            problem.is_queued = function() { return problem.status === 'queued'; };
+            problem.results = '';
 
-        db.view('datum/output', {  }, function (err, rowSet) {
-            for (var i in rowSet) {
-                var row = rowSet[i].value;
-                var resultNum = (parseInt(i, 10)+1);
-                problem.results += resultNum + '. ' + row.key + ' = ' + row.values + '\n';
-            }
-		    resp.render('problem/show.html', {
-			    problem: problem
+            db.view('datum/output', {  }, function (err, rowSet) {
+                for (var i in rowSet) {
+                    var row = rowSet[i].value;
+                    var resultNum = (parseInt(i, 10)+1);
+                    problem.results += resultNum + '. ' + row.key + ' = ' + row.values + '\n';
+                }
+                resp.render('problem/show.html', {
+                    problem: problem
+                });
             });
-        });
+        }
     });
 });
 
