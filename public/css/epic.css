@@ -88,14 +88,18 @@ a:hover { color: #1062be; text-decoration: underline; }
 	-moz-border-radius: 6px;
 	border-radius: 6px;
 }
+  .sidebar_box h3 {
+    font-weight: bold;
+    text-align: left;
+  }
 
-#get_started_box {
+#get_started_box, #users_get_started_box {
 	text-align: center;
 	font-size: 1.2em;
 	line-height: 1.7em;
 }
 
-#get_started_btn {
+.get_started_btn {
 	display: block;
 	width: 97px;
 	height: 32px;
@@ -104,7 +108,7 @@ a:hover { color: #1062be; text-decoration: underline; }
 	background: transparent url('../images/get_started_btn.png') no-repeat top left;
 }
 
-#get_started_btn:hover { opacity: .9; }
+.get_started_btn:hover { opacity: .9; }
 
 #solved_jobs dt {
 	font-size: 1.2em;
