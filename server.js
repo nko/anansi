@@ -137,10 +137,9 @@ app.configure(function() {
             });
         }
     });
-
 });
 
-app.use("/workers", require("./worker_api.js"));
+app.use("/workers", require("./worker_api"));
 
 /* Redirect to correct URL on every request */
 app.get(/.*/, function (req, resp, next) {

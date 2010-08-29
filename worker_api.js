@@ -6,7 +6,6 @@
  * Baseline facts:
  *  - job_ids have the format: problemId_phaseType_inputKey
  */
-
 var express = require("express"),
     sys = require("sys"),
     Problem = require('./models/problem').Problem,
@@ -17,7 +16,7 @@ var express = require("express"),
 
 module.exports = (function() {
 
-    app = express.createServer();
+    var app = express.createServer();
 
     /**
      * Here's what a job look like:
@@ -39,17 +38,21 @@ module.exports = (function() {
     app.get("/job", function(req, res) {
         dataa.getNextJob(function(err, job) {
             if (err) {
-                res.send(err.message + "\n" + err.stack, 500);
+                res.send({
+                    "message": err.message,
+                    "stack": err.stack
+                }, 500);
             } else {
-                
                 // NO MORE JOBS
                 if (job === null) {
-                    res.send("(singing) No jobs today, the jobs have gone away, lalalalala, it wasn't always so.\n", 404);
+                    res.send({
+                        "message": "(singing) No jobs today, the jobs have gone away, lalalalala, it wasn't always so."
+                    }, 500);
                     return;
                 }
                 
                 res.send({
-                    id: job._id,
+                    id: job.id,
                     problem_id: job.problem_id,
                     input: job.input,
                     algorithm: job.algorithm,
@@ -63,6 +66,9 @@ module.exports = (function() {
                 // });
 
             }
+            res.send('hello');
+        /*
+        */
         });
     });
 
@@ -70,7 +76,7 @@ module.exports = (function() {
      * Posts the result of a job back.
      * NOTE: The client is responsible for pulling a new job. We don't do any redirect vodoo or whatever
      * TODO: Do redirect vodoo. Let's squeeze out another 100ms of proc power
-     */
+//*/
     app.post("/job/:jobId", function(req, res) {
         console.log("Received results "+sys.inspect(req.body));
 
@@ -161,6 +167,6 @@ module.exports = (function() {
             }
         });
     });
-
+    //*/
     return app;
 })();
