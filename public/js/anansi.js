@@ -4,6 +4,8 @@
  *	@Author: Ryan McGrath (ryan@venodesigns.net)
  */
 
+var DEBUG = false;
+
 /*  Think of this as the core library... (jonas: yeah that's why have a file called core.js, too.)*/
 var runner = {
     /*  API/whatever key */
@@ -54,7 +56,7 @@ var runner = {
                 // bad luck, we're out of time
                 // estimate how long the task would have taken
                 end_time = Math.floor(new Date().getTime() + (repeat - i) * ((new Date().getTime() - start_time) / i));
-                self.postMessage("Estimating performance!");
+                if(DEBUG) self.postMessage("Estimating performance!");
                 break;
             }
 
@@ -65,7 +67,7 @@ var runner = {
 
         var delta = end_time - start_time;
         runner.cu_per_s = 1000/delta;
-        self.postMessage("Established Computing Units /s: "+runner.cu_per_s.toString().substr(0,5));
+        if(DEBUG) self.postMessage("Established Computing Units /s: "+runner.cu_per_s.toString().substr(0,5));
     },
 
     /**
@@ -76,24 +78,24 @@ var runner = {
     getJob: function() {
         
         if (runner.current_job) {
-            self.postMessage("Stop calling getJob when a job is still running. That's stoopid");
+            if(DEBUG) self.postMessage("Stop calling getJob when a job is still running. That's stoopid");
             return;
         }
-        self.postMessage("Pulling new job now ... ");
+        if(DEBUG) self.postMessage("Pulling new job now ... ");
         
         var job = JSON.parse(runner.req("/workers/job", "GET"));
         if (!job) {
             // see you soon?
-            self.postMessage("Failed to get a job");
+            if(DEBUG) self.postMessage("Failed to get a job");
             //setTimeout(runner.getJob, 2000);
             return;
         }
         
         runner.current_job = job;
-        self.postMessage("Received job:");
+        if(DEBUG) self.postMessage("Received job:");
         //self.postMessage(job);
         // download the algorithm
-        self.postMessage("Received "+ job.type + " algo: "+job.algorithm);
+        if(DEBUG) self.postMessage("Received "+ job.type + " algo: "+job.algorithm);
         runner.algorithm = eval("("+job.algorithm+")"); // gives u goosebumps
         runner.runtime_data = {
             done: false,
@@ -118,7 +120,7 @@ var runner = {
                 clearInterval(interval);
                 runner.finishJob();
             } else {
-                postMessage("Running iteration "+runner.runtime_data.iteration+" ...(crazy)");
+                if(DEBUG) postMessage("Running iteration "+runner.runtime_data.iteration+" ...(crazy)");
                 runner.algorithm.call(runner.runtime_data, runner.current_job.input.key, runner.current_job.input.value);
                 runner.runtime_data.iteration++;
             }
@@ -126,7 +128,7 @@ var runner = {
     },
     
     finishJob: function() {
-        self.postMessage("Finished job id=" + runner.current_job.id + " after " + runner.runtime_data.iteration + " with result");
+        if(DEBUG) self.postMessage("Finished job id=" + runner.current_job.id + " after " + runner.runtime_data.iteration + " with result");
         //self.postMessage(runner.runtime_data.results);
         runner.req("/workers/job/"+runner.current_job.id, "POST", runner.runtime_data.results);
     },
@@ -150,7 +152,7 @@ var runner = {
 
 
         if (xhr.status !== 200) {
-            self.postMessage("Received status " + xhr.status + " when " + method + "ing " + url);
+            if(DEBUG) self.postMessage("Received status " + xhr.status + " when " + method + "ing " + url);
             return false;
         }
 
@@ -193,12 +195,12 @@ self.addEventListener('message', function(message) {
     
     switch(message.data) {
         case "init":
-            self.postMessage("Initialized runner with key " + runner.key);
+            if(DEBUG) self.postMessage("Initialized runner with key " + runner.key);
             //runner.key = .key;
             break;
         
         case "start":
-            self.postMessage("Starting runner now ...");
+            if(DEBUG) self.postMessage("Starting runner now ...");
             // magic. begins. here.
             runner.speedTest();
             
