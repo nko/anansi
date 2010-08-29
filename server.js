@@ -11,6 +11,8 @@ var express = require('express'),
 var cradle = require('cradle'),
     c = new(cradle.Connection)('maprejuice.couchone.com'),
     db = c.database('maprejuice');
+
+var TEN_MINS_IN_MS = (1000 * 60 * 10);
     
 app.configure(function() {
     app.use(express.logger({
@@ -38,21 +40,21 @@ app.configure(function() {
         },
         queued: {
             map: function (doc) {
-                if (doc.name && doc.type == 'problem' && doc.status && doc.status == 'queued') {
+                if (doc.type && doc.type == 'problem' && doc.status && doc.status == 'queued') {
                     emit(null, doc);
                 }
             }
         },
         running: {
             map: function (doc) {
-                if (doc.name && doc.type == 'problem' && doc.status && doc.status == 'running') {
+                if (doc.type && doc.type == 'problem' && doc.status && doc.status == 'running') {
                     emit(null, doc);
                 }
             }
         },
         complete: {
             map: function (doc) {
-                if (doc.name && doc.type == 'problem' && doc.status && doc.status == 'complete') {
+                if (doc.type && doc.type == 'problem' && doc.status && doc.status == 'complete') {
                     emit(null, doc);
                 }
             }
@@ -71,6 +73,15 @@ app.configure(function() {
         queued: {
             map: function (doc) {
                 if (doc.type && doc.type === "job" && doc.status && doc.status === "queued") {
+                    emit(doc.created_at, doc);
+                }
+            }
+        },
+        stale: {
+            map: function (doc) {
+                if (doc.type && doc.type == 'job'
+                        && doc.status && doc.status == 'processing'
+                        && doc.created_at && doc.created_at < (new Date().getTime() - TEN_MINS_IN_MS)) {
                     emit(doc.created_at, doc);
                 }
             }
