@@ -1,0 +1,22 @@
+<a href="/jobs">All</a> &bull; <a href="/jobs/queued">Queued</a>
+
+<table border="1">
+  <tr>
+    <th>Job Id</th>
+    <th>Problem Id</th>
+    <th>Algorithm</th>
+    <th>Input Data</th>
+    <th>Created At</th>
+    <th>Status</th>
+  </tr>
+  {{#jobs}}
+  <tr>
+    <td>{{id}}</td>
+    <td>{{problem_id}}</td>
+    <td>{{algorithm}}</td>
+    <td>{{stringify_input}}</td>
+    <td>{{created_at}}</td>
+    <td>{{status}}</td>
+  </tr>
+  {{/jobs}}
+</table>

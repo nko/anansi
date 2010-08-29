@@ -272,11 +272,8 @@ app.get('/jobs', function(req, res) {
                     var job = new Job(rowSet[row].value);
                     jobsList.push(job);
                 }
-                res.render('job/list', {
-                    layout: false,
-                    locals: {
-                        jobs: jobsList
-                    }
+                res.render('job/list.html', {
+                    jobs: jobsList
                 });
             });
 });
@@ -288,11 +285,8 @@ app.get('/jobs/queued', function(req, res) {
                     var job = new Job(rowSet[row].value);
                     jobsList.push(job);
                 }
-                res.render('job/list', {
-                    layout: false,
-                    locals: {
-                        jobs: jobsList
-                    }
+                res.render('job/list.html', {
+                    jobs: jobsList
                 });
             });
 });
