@@ -113,7 +113,7 @@ module.exports = (function() {
      */
     that.getNextJob = function(callback) {
         process.nextTick(function() {
-            db.view('jobs/queued', function(err, rowSet) {
+            db.view('jobs/queued', { limit: 1 }, function(err, rowSet) {
                 if (err || !rowSet || rowSet.length == 0) {
                     callback(err, null);
                 } else {
