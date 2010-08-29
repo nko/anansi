@@ -138,7 +138,6 @@ app.get('/problem/:id/start', function(req, resp) {
         var p = new Problem(result);
         // only start the job if it isn't already running
         if (!(p.status === 'running')) {
-            p.status = 'running';
             var input_data = p.data;
             for (var key in input_data) {
                 var inp = {};
@@ -152,12 +151,18 @@ app.get('/problem/:id/start', function(req, resp) {
                 sys.puts(sys.inspect(job));
                 if (job.validate()) {
                     db.insert(job, function (err, result) {
-                        sys.puts(sys.inspect(err));
+                        sys.puts("insert job "+result.id);
                     });
                 }
             }
+            p.status = 'running';
+            db.save(p.id, p, function (err, result) {
+                sys.puts("save status => " + sys.inspect(result));
+                resp.redirect('/problem/'+req.params.id);
+            });
+        } else {
+            resp.redirect('/problem/'+req.params.id);
         }
-        resp.redirect('/problem/'+req.params.id);
     });
 });
 
