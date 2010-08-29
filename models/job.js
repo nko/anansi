@@ -16,7 +16,7 @@ exports.Job = function(opts) {
     this.rev = opts.rev || opts['_rev'];
     this.problem_id = opts.problem_id;
     this.created_at = opts.created_at || (new Date().getTime());
-    this.status = opts.status || 'queued';
+    this.status = opts.status || 'queued'; // can be 'queued' 'processing' or 'complete'
     if (opts.input) {
         if (typeof opts.input === 'string') {
             this.input = JSON.parse(opts.input)
@@ -28,6 +28,7 @@ exports.Job = function(opts) {
     }
     this.algorithm = opts.algorithm;
     this.algorithm_type = opts.algorithm_type;
+    this.datumId = opts.datumId;
     this.type = 'job';
     this.errors = [];
 };
