@@ -218,9 +218,16 @@ app.get('/problem/:id', function(req, resp) {
         console.log(sys.inspect(problem));
 		problem.initial_data = JSON.stringify(problem.data);
 		problem.is_queued = function() { return problem.status === 'queued'; };
-		
-		resp.render('problem/show.html', {
-			problem: problem
+        problem.results = [];
+
+        db.view('datum/output', {  }, function (err, rowSet) {
+            for (var i in rowSet) {
+                problem.results.push(rowSet[i]);
+            }
+            problem.results_as_string = JSON.stringify(problem.results);
+		    resp.render('problem/show.html', {
+			    problem: problem
+            });
         });
     });
 });
