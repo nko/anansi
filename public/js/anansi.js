@@ -20,8 +20,7 @@ var runner = {
      * the time it takes to 
      */
     speedTest: function() {
-
-        
+ 
         var sqrt = function(x) {
             var j = x / 2;
             var min = 0;
@@ -37,11 +36,10 @@ var runner = {
             }
             return j;
         };
-        
-
-        
+                
         var threshold = 4000, // ms
-            num = 2, repeat = 1000000;
+            num = 2, 
+			repeat = 1000000;
             
         // TODO find a better benchmark, this is ridiculous
         var end_time,
@@ -56,10 +54,11 @@ var runner = {
             if((i%10 === 0) && (new Date().getTime() - start_time) > threshold) {
                 // bad luck, we're out of time
                 // estimate how long the task would have taken
-                end_time = Math.floor(new Date().getTime() + (repeat-i)*((new Date().getTime() - start_time)/i));
+                end_time = Math.floor(new Date().getTime() + (repeat - i) * ((new Date().getTime() - start_time) / i));
                 self.postMessage("Estimating performance!");
                 break;
             }
+
             if (i === repeat-1) {
                 end_time = new Date().getTime();
             }
