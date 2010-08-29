@@ -15,6 +15,7 @@ if(!!window.Worker) {
 			for(var i = 0; i < r.length; i = i + 2) {
 				if(r[i] === 'token') return r[i + 1];
 			}
+			return "";
 		})(window.location.search.substring(1)),
 
 		/*    Wrapper method, fairly self explanatory. */
@@ -34,14 +35,9 @@ if(!!window.Worker) {
 		// tell worker to initialize
 		// this gives us an avenue to addfurther commands such as
 		// stop, pause, slower, yo name it
-		anansi.worker.postMessage({
-			command: "init",
-			key: anansi.token
-		});
+		anansi.worker.postMessage("init");
     
-		anansi.worker.postMessage({
-			command: "start"
-		});
+		anansi.worker.postMessage("start");
 	})();
 }
 </script>

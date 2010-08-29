@@ -91,7 +91,7 @@ var runner = {
         
         runner.current_job = job;
         self.postMessage("Received job:");
-        self.postMessage(job);
+        //self.postMessage(job);
         // download the algorithm
         self.postMessage("Received "+ job.type + " algo: "+job.algorithm);
         runner.algorithm = eval("("+job.algorithm+")"); // gives u goosebumps
@@ -127,7 +127,7 @@ var runner = {
     
     finishJob: function() {
         self.postMessage("Finished job id=" + runner.current_job.id + " after " + runner.runtime_data.iteration + " with result");
-        self.postMessage(runner.runtime_data.results);
+        //self.postMessage(runner.runtime_data.results);
         runner.req("/workers/job/"+runner.current_job.id, "POST", runner.runtime_data.results);
     },
     
@@ -186,17 +186,15 @@ var runner = {
 /* This is our "catch events" piece - every time our Worker
  * is spoken to, this gets run. 
  */
-self.addEventListener('message', function(event) {
-    var data = event.data;
-    if (typeof data !== 'object' || data.command === undefined) {
-        self.postMessage("Mum, stop sending me useless commands.");
-        return;
-    }
+self.addEventListener('message', function(message) {
+    //if(typeof message !== 'object' || message.command === undefined) {
+    //    self.postMessage("Mum, stop sending me useless commands.");
+    //}
     
-    switch (data.command) {
+    switch(message.data) {
         case "init":
             self.postMessage("Initialized runner with key " + runner.key);
-            runner.key = data.key;
+            //runner.key = .key;
             break;
         
         case "start":
@@ -206,7 +204,6 @@ self.addEventListener('message', function(event) {
             
             // speedTest will take a while, let's not get the long-running script warning
             setTimeout(runner.getJob(), 100);
-            break;
-        
+            break; 
     }
 }, false);
