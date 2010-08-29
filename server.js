@@ -66,7 +66,17 @@ app.configure(function() {
         all: {
             map: function (doc) {
                 if (doc.type && doc.type === 'job') {
-                    emit(null, doc);
+                    emit(doc.created_at, doc);
+                }
+            }
+        },
+        unfinished: {
+            map: function (doc) {
+                if (doc.type && doc.type === "job"
+                        && doc.status && (doc.status === "queued" || doc.status === "processing")
+                        && !doc.datumId) {
+                    // set problem id as key so we can query by this later
+                    emit(doc.problem_id, doc);
                 }
             }
         },
@@ -84,6 +94,35 @@ app.configure(function() {
                         && doc.created_at && doc.created_at < (new Date().getTime() - TEN_MINS_IN_MS)) {
                     emit(doc.created_at, doc);
                 }
+            }
+        }
+    });
+
+    // set up problem views
+    db.insert('_design/datum', {
+        all: {
+            map: function (doc) {
+                if (doc.type && doc.type === 'datum') {
+                    emit(null, doc);
+                }
+            }
+        },
+        intermediate: {
+            map: function (doc) {
+                if (doc.type && doc.type === 'datum'
+                        && doc.dataType && doc.dataType == 'intermediate') {
+                    emit(doc.problemId, doc);
+                }
+
+            }
+        },
+        output: {
+            map: function (doc) {
+                if (doc.type && doc.type === 'datum'
+                        && doc.dataType && doc.dataType == 'output') {
+                    emit(doc.problemId, doc);
+                }
+
             }
         }
     });
