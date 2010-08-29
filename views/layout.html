@@ -1,0 +1,67 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+    <title>MapRejuice - Distributed Computing at its finest</title>
+	<link rel="stylesheet" type="text/css" href="/css/epic.css" media="screen">
+	<script type="text/javascript" src="http://use.typekit.com/uxl8onc.js"></script>
+	<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+</head>
+<body>
+	<div id="header" class="container">
+		<a href="/" id="logo" title="MapRejuice - Distributed Computing at its finest!">
+			MapRejuice - Distributed Computing at its finest!
+		</a>
+	</div>
+
+	<div id="wrapper" class="container">
+		<div id="content">
+			{{#locals}}
+				{{{body}}}
+			{{/locals}}
+		</div>
+
+		<div id="sidebar">
+			<div id="get_started_box" class="sidebar_box">
+				<p>
+					Wanna help solve some of the most difficult 
+					problems in the world? If you have a 
+					website, you can participate in the
+					MapRejuice project!
+				</p>
+				<a href="/" title="Get Started with MapRejuice!" id="get_started_btn">Get Started with MapRejuice!</a>
+			</div>
+		
+			<div id="currently_being_solved" class="sidebar_box">
+				<dl id="solved_jobs">
+					<dt>Current Jobs We're Solving</dt>
+				</dl>
+				<img src="/images/ajax-loader.gif" alt="Loading..." id="loading_jobs">
+			</div>
+		</div>
+	
+		<div class="sandbox">
+		</div>
+	</div>
+
+	<div id="footer" class="container">
+		<div id="copyright">
+			Copyright &copy; the MapRejuice Team 2010. All rights reserved.<br>
+			<a href="http://twitter.com/shiftb" title="Brandon Leonardo on Twitter" target="_blank">Brandon Leonardo</a> -
+			<a href="http://twitter.com/jonashuckestein" title="Jonas Huckestein on Twitter" target="_blank">Jonas Huckestein</a> -
+			<a href="http://twitter.com/ryanmcgrath" title="Ryan McGrath (the most awesome one) on Twitter" target="_blank">Ryan McGrath</a>
+		</div>
+
+		<ul id="footer_nav">
+			<li><a href="/" title="Get Started with MapRejuice!">Get started with MapRejuice</a></li>
+			<li><a href="/about/" title="About MapRejuice &amp; the Team">About Us</a></li>
+			<li><a href="/contact/" title="Contact the MapRejuice Team">Contact Us</a></li>
+		</ul>
+	
+		<div class="sandbox"></div>
+	</div>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
+	<script src="/js/core.js" type="text/javascript"></script>
+</body>
+</html>

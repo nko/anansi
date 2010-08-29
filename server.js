@@ -4,7 +4,8 @@ var express = require('express'),
 	listenPort = 3000,
 	app = express.createServer(),
     _ = require('./lib/underscore')._,
-    Problem = require('./models/problem').Problem,
+    mustache = require('mustache'),
+	Problem = require('./models/problem').Problem,
     Job = require('./models/job').Job;
 
 var cradle = require('cradle'),
@@ -16,8 +17,17 @@ app.configure(function() {
         format: ':method :url'
     }));
     app.use(express.bodyDecoder());
-    app.set('view engine', 'jade');
-    app.use(express.staticProvider(__dirname + '/public'));
+	
+	/*	Magic that makes Mustache work as our templating engine. ;D */
+	app.register('.html', {
+		render: function(str, obj) {
+			return mustache.to_html(str, obj);
+		}
+	});
+    
+	//app.set('view engine', 'mustache');
+    
+	app.use(express.staticProvider(__dirname + '/public'));
 
     // set up database if it doesn't exist
     db.exists(function (err, res) {
@@ -93,19 +103,36 @@ app.get(/.*/, function (req, resp, next) {
 
 /* Homepage */
 app.get('/', function(req, res) {
-    db.view('problems/all',
+    /* Disabled temporarily
+	db.view('problems/all',
             function (err, rowSet) {
                 var problemsList = [];
                 for (var row in rowSet) {
                     var p = new Problem(rowSet[row].value);
                     problemsList.push(p);
                 }
-                res.render('index', {
-                    locals: {
-                        problems: problemsList
-                    }
-                });
-            });
+                res.render('index.html', { problems: problemsList });
+            }); */
+	res.render('index.html');
+});
+
+/* This is a stub, please expand it. */
+app.get('/recently_solved', function(req, res) {
+	res.send(JSON.stringify([
+		{name: "Jonas Algorithm", percentage: "88", url: "/"},
+		{name: "Brandon Account", percentage: "18", url: "/"},
+		{name: "Ryan Theories", percentage: "95", url: "/"},
+		{name: "Tons of Sharks", percentage: "38", url: "/"},
+		{name: "Traveling Salesman", percentage: "0", url: "/"},
+	]));
+});
+
+app.get('/about', function(req, res) {
+	res.render('about.html');
+});
+
+app.get('/contact', function(req, res) {
+	res.render('contact.html');
 });
 
 /* Form to create problem */

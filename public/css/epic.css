@@ -1,0 +1,159 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, font, img, kbd, q, s, samp,
+small, strike, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+margin: 0; padding: 0; border: 0; outline: 0; font-weight: inherit; font-style: inherit; font-size: 100%; font-family: inherit; vertical-align: baseline; }
+:focus { outline: 0; }
+body { line-height: 1; }
+ol, ul { list-style: none; }
+table { border-collapse: separate; border-spacing: 0; }
+caption, th, td { text-align: left; font-weight: normal; }
+blockquote:before, blockquote:after, q:before, q:after { content: ""; }
+blockquote, q { quotes: "" ""; }
+
+html {
+	text-align: center;
+	background: #f9f9f9 url('../images/epic_bg.jpg') repeat-x top left;
+	font: normal 62.5%/1 helvetica, arial, sans-serif;
+	color: #333;
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	padding: 0;
+	margin: 0;
+}
+
+a, a:visited { color: #156aca; text-decoration: none; }
+a:hover { color: #1062be; text-decoration: underline; }
+
+.sandbox { clear: both; }
+
+.container {
+	width: 840px;
+	margin: 10px auto;
+	text-align: left;
+}
+
+#header {
+	margin-top: -5px !important;
+}
+
+#logo {
+	display: block;
+	width: 218px;
+	height: 68px;
+	background: #c72f2f url('../images/logo.png') no-repeat 5px 10px;
+	text-indent: -9000px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+}
+
+#content {
+	float: left;
+	width: 524px;
+	padding: 10px;
+	border: 1px solid #c9c8c8;
+	background-color: rgba(237, 237, 237, .4);
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+}
+
+#content h1, #content h2 {
+	font-family: "junction-1", "junction-2", helvetica, arial, sans-serif;
+	font-size: 1.6em;
+	color: #c72f2f;
+}
+
+#content p {
+	font-size: 1.2em;
+	line-height: 1.4em;
+	margin: 0 0 20px 0;
+}
+
+#sidebar {
+	float: left;
+	width: 260px;
+	margin-left: 10px;
+}
+
+.sidebar_box {
+	width: 260px;
+	padding: 10px;
+	margin: 0 0 10px 0;
+	border: 1px solid #c2c2c2;
+	background-color: rgba(205, 205, 205, .3);
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+}
+
+#get_started_box {
+	text-align: center;
+	font-size: 1.2em;
+	line-height: 1.7em;
+}
+
+#get_started_btn {
+	display: block;
+	width: 97px;
+	height: 32px;
+	margin: 10px auto 0;
+	text-indent: -9000px;
+	background: transparent url('../images/get_started_btn.png') no-repeat top left;
+}
+
+#get_started_btn:hover { opacity: .9; }
+
+#solved_jobs dt {
+	font-size: 1.2em;
+	padding: 0 0 5px 0;
+	margin-bottom: 10px;
+	border-bottom: 1px solid #898989;
+}
+
+#solved_jobs dd { margin-bottom: 2px; }
+
+#solved_jobs dd a, #solved_jobs dd a:visited {
+	font-size: 1.2em;
+	line-height: 1.2em;
+	display: block;
+	width: 250px;
+	padding: 6px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+#solved_jobs dd a:hover {
+	background-color: #c9c9c9;
+	text-decoration: none;
+}
+
+.job_percentage { color: #333 !important; }
+
+#loading_jobs { margin: 10px 0 5px 110px; }
+
+#footer {
+	background-color: #131313;
+	font-size: 1.1em;
+	line-height: 1.4em;
+	color: #f9f9f9;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+#copyright {
+	width: 400px;
+	float: left;
+	padding: 10px;
+}
+
+#footer_nav {
+	text-align: right;
+	width: 200px;
+	float: right;
+	padding: 10px;
+}
