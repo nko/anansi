@@ -51,9 +51,20 @@ a:hover { color: #1062be; text-decoration: underline; }
 
 #joyent_badge:hover { opacity: .9; }
 
+#nkobadge {
+	display: block;
+	position: absolute;
+	top: 5px;
+	left: 230px;
+	width: 126px;
+	height: 63px;
+	background: transparent url('http://nodeknockout.com/images/voteko.png') no-repeat top left;
+	text-indent: -9000px;
+}
+
 #thank_god {
 	position: absolute;
-	width: 220px;
+	width: 230px;
 	top: 25px;
 	right: 20px;
 	padding-top: 5px;
