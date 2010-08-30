@@ -141,7 +141,7 @@ app.configure(function() {
 });
 
 
-var socketio = io.listen(app);
+//var socketio = io.listen(app);
 
 app.use("/workers", require("./worker_api")(socketio));
 

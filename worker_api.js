@@ -16,11 +16,12 @@ var express = require("express"),
 
 module.exports = function(socketio) {
 
-    var jobs_per_minute = 0;
+    /*
+	var jobs_per_minute = 0;
     setInterval(function(){
         socketio.broadcast(JSON.stringify({time: new Date().getTime(), jobs_per_minute: jobs_per_minute}));
     }, 2000);
-
+*/
 
     var app = express.createServer();
 
