@@ -4,7 +4,7 @@
  *	@Author: Ryan McGrath (ryan@venodesigns.net)
  */
 
-var DEBUG = true;
+var DEBUG = false;
 /*  Think of this as the core library... (jonas: yeah that's why have a file called core.js, too.)*/
 var runner = {
     /*  API/whatever key */
