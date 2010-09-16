@@ -141,9 +141,8 @@ app.configure(function() {
 });
 
 
-//var socketio = io.listen(app);
-
-app.use("/workers", require("./worker_api")(io));
+var socketio = io.listen(app);
+app.use("/workers", require("./worker_api")(socketio));
 
 /* Redirect to correct URL on every request */
 app.get(/.*/, function (req, resp, next) {
